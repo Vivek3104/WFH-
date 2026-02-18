@@ -5,7 +5,7 @@ import upload from '../middlewares/uploadMiddleware.js';
 
 const router = express.Router();
 
-router.post('/register', adminController.register);
+router.post('/register', adminController.register); 
 router.post('/login', adminController.login);
 router.put('/profile', authAdmin, upload.single('profilePic'), adminController.updateProfile);
 router.put('/company-details', authAdmin, adminController.updateCompanyDetails);
@@ -20,3 +20,4 @@ router.post('/process-withdrawal', authAdmin, adminController.processWithdrawal)
 router.get('/work-history', authAdmin, adminController.getWorkHistory);
 
 export default router;
+    
