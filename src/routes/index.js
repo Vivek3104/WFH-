@@ -15,7 +15,7 @@ const router = express.Router();
 |--------------------------------------------------------------------------
 */
 
-router.use('/users', userRoutes);
+router.use('/users', userRoutes);   
 router.use('/admin', adminRoutes);
 router.use('/superadmin', franchiseRoutes);
 router.use('/task', taskRoutes);

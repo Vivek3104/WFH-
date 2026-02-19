@@ -1,0 +1,142 @@
+{
+  "info": {
+    "name": "WFH - USER",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Register User",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"user123\",\n  \"name\": \"John Doe\",\n  \"phone\": \"9876543210\"\n}"
+        },
+        "url": {"raw": "http://localhost:3000/api/users/register"}
+      }
+    },
+    {
+      "name": "2. Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": ["pm.test(\"Save token\", function () {", "    var jsonData = pm.response.json();", "    pm.environment.set(\"userToken\", jsonData.token);", "});"]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"user123\"\n}"
+        },
+        "url": {"raw": "http://localhost:3000/api/users/login"}
+      }
+    },
+    {
+      "name": "3. Get Profile",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{userToken}}"}],
+        "url": {"raw": "http://localhost:3000/api/users/profile"}
+      }
+    },
+    {
+      "name": "4. Update Profile",
+      "request": {
+        "method": "PUT",
+        "header": [{"key": "Authorization", "value": "Bearer {{userToken}}"}],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {"key": "name", "value": "John Updated", "type": "text"},
+            {"key": "phone", "value": "1234567890", "type": "text"},
+            {"key": "profilePic", "type": "file", "src": []}
+          ]
+        },
+        "url": {"raw": "http://localhost:3000/api/users/update/profile"}
+      }
+    },
+    {
+      "name": "5. Update Bank Details",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{userToken}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountNumber\": \"1234567890\",\n  \"ifscCode\": \"ABCD0123456\",\n  \"accountHolderName\": \"John Doe\",\n  \"bankName\": \"State Bank\"\n}"
+        },
+        "url": {"raw": "http://localhost:3000/api/users/bank-details"}
+      }
+    },
+    {
+      "name": "6. Update Government Doc",
+      "request": {
+        "method": "PUT",
+        "header": [{"key": "Authorization", "value": "Bearer {{userToken}}"}],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {"key": "docType", "value": "Aadhar", "type": "text"},
+            {"key": "docNumber", "value": "123456789012", "type": "text"},
+            {"key": "docFile", "type": "file", "src": []}
+          ]
+        },
+        "url": {"raw": "http://localhost:3000/api/users/government-doc"}
+      }
+    },
+    {
+      "name": "7. Submit Work",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Authorization", "value": "Bearer {{userToken}}"}],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {"key": "taskId", "value": "TASK_ID_HERE", "type": "text"},
+            {"key": "submissionData", "value": "Work completed successfully", "type": "text"},
+            {"key": "files", "type": "file", "src": []}
+          ]
+        },
+        "url": {"raw": "http://localhost:3000/api/users/submit-work"}
+      }
+    },
+    {
+      "name": "8. Get Work History",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{userToken}}"}],
+        "url": {"raw": "http://localhost:3000/api/users/work-history"}
+      }
+    },
+    {
+      "name": "9. Request Withdrawal",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{userToken}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 500\n}"
+        },
+        "url": {"raw": "http://localhost:3000/api/users/withdrawal"}
+      }
+    },
+    {
+      "name": "10. Get Withdrawals",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{userToken}}"}],
+        "url": {"raw": "http://localhost:3000/api/users/withdrawals"}
+      }
+    }
+  ]
+}

@@ -64,6 +64,7 @@ export const getPendingWork = async () => {
 export const reviewWork = async (submissionId, status, adminId, adminNotes) => {
   const submission = await workRepo.findSubmissionById(submissionId);
   if (!submission) throw new Error('Submission not found');
+  if (!submission.taskId) throw new Error('Task not found for this submission');
   
   submission.status = status;
   submission.adminNotes = adminNotes;
