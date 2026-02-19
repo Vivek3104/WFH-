@@ -25,7 +25,7 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const user = await userService.updateUserProfile(req.user._id, req.body, req.file);
+    const user = await userService.updateUserProfile(req.params.id, req.body, req.file);
     res.json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
