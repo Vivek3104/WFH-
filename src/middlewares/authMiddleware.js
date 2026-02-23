@@ -1,16 +1,15 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
-import Admin from '../models/Admin.js';
+import { User, Admin } from '../models/index.js';
 
 export const authUser = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'No token provided' });
-    
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
+    const user = await User.findByPk(decoded.id);
     if (!user) return res.status(401).json({ error: 'Invalid token' });
-    
+
     req.user = user;
     next();
   } catch (error) {
@@ -22,11 +21,11 @@ export const authAdmin = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'No token provided' });
-    
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const admin = await Admin.findById(decoded.id);
+    const admin = await Admin.findByPk(decoded.id);
     if (!admin) return res.status(401).json({ error: 'Invalid token' });
-    
+
     req.admin = admin;
     next();
   } catch (error) {
@@ -38,13 +37,13 @@ export const authSuperAdmin = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) return res.status(401).json({ error: 'No token provided' });
-    
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const admin = await Admin.findById(decoded.id);
+    const admin = await Admin.findByPk(decoded.id);
     if (!admin || admin.role !== 'superadmin') {
       return res.status(403).json({ error: 'Access denied' });
     }
-    
+
     req.admin = admin;
     next();
   } catch (error) {

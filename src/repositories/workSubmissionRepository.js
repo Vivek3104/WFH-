@@ -1,33 +1,47 @@
-import WorkSubmission from '../models/WorkSubmission.js';
+import { WorkSubmission, User, Task } from '../models/index.js';
 
 export const createSubmission = async (submissionData) => {
   return await WorkSubmission.create(submissionData);
 };
 
 export const findPendingSubmissions = async () => {
-  return await WorkSubmission.find({ status: 'pending' })
-    .populate('userId', 'name email')
-    .populate('taskId')
-    .sort('-createdAt');
+  return await WorkSubmission.findAll({
+    where: { status: 'pending' },
+    include: [
+      { model: User, as: 'user', attributes: ['name', 'email'] },
+      { model: Task, as: 'task' },
+    ],
+    order: [['created_at', 'DESC']],
+  });
 };
 
 export const findSubmissionById = async (id) => {
-  return await WorkSubmission.findById(id).populate('taskId');
+  return await WorkSubmission.findByPk(id, {
+    include: [{ model: Task, as: 'task' }],
+  });
 };
 
 export const findUserSubmissions = async (userId) => {
-  return await WorkSubmission.find({ userId })
-    .populate('taskId')
-    .sort('-createdAt');
+  return await WorkSubmission.findAll({
+    where: { userId },
+    include: [{ model: Task, as: 'task' }],
+    order: [['created_at', 'DESC']],
+  });
 };
 
 export const findAllSubmissions = async () => {
-  return await WorkSubmission.find()
-    .populate('userId', 'name email')
-    .populate('taskId')
-    .sort('-createdAt');
+  return await WorkSubmission.findAll({
+    include: [
+      { model: User, as: 'user', attributes: ['name', 'email'] },
+      { model: Task, as: 'task' },
+    ],
+    order: [['created_at', 'DESC']],
+  });
 };
 
 export const updateSubmission = async (id, updateData) => {
-  return await WorkSubmission.findByIdAndUpdate(id, updateData, { new: true });
+  await WorkSubmission.update(updateData, { where: { id } });
+  return await WorkSubmission.findByPk(id, {
+    include: [{ model: Task, as: 'task' }],
+  });
 };

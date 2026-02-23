@@ -1,17 +1,18 @@
-import Admin from '../models/Admin.js';
+import { Admin } from '../models/index.js';
 
 export const createAdmin = async (adminData) => {
   return await Admin.create(adminData);
 };
 
 export const findAdminByEmail = async (email) => {
-  return await Admin.findOne({ email });
+  return await Admin.findOne({ where: { email } });
 };
 
 export const findAdminById = async (id) => {
-  return await Admin.findById(id);
+  return await Admin.findByPk(id);
 };
 
 export const updateAdmin = async (id, updateData) => {
-  return await Admin.findByIdAndUpdate(id, updateData, { new: true });
+  await Admin.update(updateData, { where: { id } });
+  return await Admin.findByPk(id);
 };

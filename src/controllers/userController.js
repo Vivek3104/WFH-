@@ -34,7 +34,7 @@ export const updateProfile = async (req, res) => {
 
 export const updateBankDetails = async (req, res) => {
   try {
-    const bankDetails = await userService.updateUserBankDetails(req.user._id, req.body);
+    const bankDetails = await userService.updateUserBankDetails(req.user.id, req.body);
     res.json(bankDetails);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -43,7 +43,7 @@ export const updateBankDetails = async (req, res) => {
 
 export const updateGovernmentDoc = async (req, res) => {
   try {
-    const doc = await userService.updateUserGovernmentDoc(req.user._id, req.body, req.file);
+    const doc = await userService.updateUserGovernmentDoc(req.user.id, req.body, req.file);
     res.json(doc);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -53,7 +53,7 @@ export const updateGovernmentDoc = async (req, res) => {
 export const submitWork = async (req, res) => {
   try {
     const submission = await userService.submitUserWork(
-      req.user._id,
+      req.user.id,
       req.body.taskId,
       req.body.submissionData,
       req.files
@@ -66,7 +66,7 @@ export const submitWork = async (req, res) => {
 
 export const getWorkHistory = async (req, res) => {
   try {
-    const submissions = await userService.getUserWorkHistory(req.user._id);
+    const submissions = await userService.getUserWorkHistory(req.user.id);
     res.json(submissions);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -75,7 +75,7 @@ export const getWorkHistory = async (req, res) => {
 
 export const requestWithdrawal = async (req, res) => {
   try {
-    const withdrawal = await userService.requestUserWithdrawal(req.user._id, req.body.amount);
+    const withdrawal = await userService.requestUserWithdrawal(req.user.id, req.body.amount);
     res.status(201).json(withdrawal);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -84,7 +84,7 @@ export const requestWithdrawal = async (req, res) => {
 
 export const getWithdrawals = async (req, res) => {
   try {
-    const withdrawals = await userService.getUserWithdrawals(req.user._id);
+    const withdrawals = await userService.getUserWithdrawals(req.user.id);
     res.json(withdrawals);
   } catch (error) {
     res.status(400).json({ error: error.message });

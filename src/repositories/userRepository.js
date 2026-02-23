@@ -1,21 +1,24 @@
-import User from '../models/User.js';
+import { User } from '../models/index.js';
 
 export const createUser = async (userData) => {
   return await User.create(userData);
 };
 
 export const findUserByEmail = async (email) => {
-  return await User.findOne({ email });
+  return await User.findOne({ where: { email } });
 };
 
 export const findUserById = async (id) => {
-  return await User.findById(id);
+  return await User.findByPk(id);
 };
 
 export const updateUser = async (id, updateData) => {
-  return await User.findByIdAndUpdate(id, updateData, { new: true });
+  await User.update(updateData, { where: { id } });
+  return await User.findByPk(id);
 };
 
 export const getAllUsers = async () => {
-  return await User.find().select('-password');
+  return await User.findAll({
+    attributes: { exclude: ['password'] },
+  });
 };

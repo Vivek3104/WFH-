@@ -1,21 +1,29 @@
-import Franchise from '../models/Franchise.js';
+import { Franchise, Admin } from '../models/index.js';
 
 export const createFranchise = async (franchiseData) => {
   return await Franchise.create(franchiseData);
 };
 
 export const findPendingFranchises = async () => {
-  return await Franchise.find({ isApproved: false }).populate('adminId', 'name email');
+  return await Franchise.findAll({
+    where: { isApproved: false },
+    include: [{ model: Admin, as: 'admin', attributes: ['name', 'email'] }],
+    order: [['created_at', 'DESC']],
+  });
 };
 
 export const findAllFranchises = async () => {
-  return await Franchise.find().populate('adminId', 'name email');
+  return await Franchise.findAll({
+    include: [{ model: Admin, as: 'admin', attributes: ['name', 'email'] }],
+    order: [['created_at', 'DESC']],
+  });
 };
 
 export const findFranchiseById = async (id) => {
-  return await Franchise.findById(id);
+  return await Franchise.findByPk(id);
 };
 
 export const updateFranchise = async (id, updateData) => {
-  return await Franchise.findByIdAndUpdate(id, updateData, { new: true });
+  await Franchise.update(updateData, { where: { id } });
+  return await Franchise.findByPk(id);
 };

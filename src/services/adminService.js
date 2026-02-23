@@ -9,8 +9,8 @@ import jwt from 'jsonwebtoken';
 
 export const registerAdmin = async (adminData) => {
   const admin = await adminRepo.createAdmin(adminData);
-  const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET);
-  const { password, ...adminWithoutPassword } = admin.toObject();
+  const token = jwt.sign({ id: admin.id }, process.env.JWT_SECRET);
+  const { password, ...adminWithoutPassword } = admin.toJSON();
   return { admin: adminWithoutPassword, token };
 };
 
@@ -19,13 +19,14 @@ export const loginAdmin = async (email, password) => {
   if (!admin || !(await admin.comparePassword(password))) {
     throw new Error('Invalid credentials');
   }
-  const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET);
-  const { password: pwd, ...adminWithoutPassword } = admin.toObject();
+  const token = jwt.sign({ id: admin.id }, process.env.JWT_SECRET);
+  const { password: pwd, ...adminWithoutPassword } = admin.toJSON();
   return { admin: adminWithoutPassword, token };
 };
 
 export const updateAdminProfile = async (adminId, updates, file) => {
   const admin = await adminRepo.findAdminById(adminId);
+  if (!admin) throw new Error('Admin not found');
   Object.keys(updates).forEach(key => {
     if (updates[key] !== undefined) admin[key] = updates[key];
   });
@@ -36,15 +37,25 @@ export const updateAdminProfile = async (adminId, updates, file) => {
 
 export const updateCompanyDetails = async (adminId, companyDetails) => {
   const admin = await adminRepo.findAdminById(adminId);
-  admin.companyDetails = companyDetails;
+  if (!admin) throw new Error('Admin not found');
+  admin.companyName = companyDetails.companyName;
+  admin.registrationNumber = companyDetails.registrationNumber;
+  admin.address = companyDetails.address;
+  admin.gstNumber = companyDetails.gstNumber;
   await admin.save();
-  return admin.companyDetails;
+  return {
+    companyName: admin.companyName,
+    registrationNumber: admin.registrationNumber,
+    address: admin.address,
+    gstNumber: admin.gstNumber,
+  };
 };
 
 export const requestFranchise = async (adminId, franchiseData) => {
   const franchise = await franchiseRepo.createFranchise({ ...franchiseData, adminId });
   const admin = await adminRepo.findAdminById(adminId);
-  admin.franchiseId = franchise._id;
+  if (!admin) throw new Error('Admin not found');
+  admin.franchiseId = franchise.id;
   await admin.save();
   return franchise;
 };
@@ -64,20 +75,22 @@ export const getPendingWork = async () => {
 export const reviewWork = async (submissionId, status, adminId, adminNotes) => {
   const submission = await workRepo.findSubmissionById(submissionId);
   if (!submission) throw new Error('Submission not found');
-  if (!submission.taskId) throw new Error('Task not found for this submission');
-  
+  if (!submission.task) throw new Error('Task not found for this submission');
+
   submission.status = status;
   submission.adminNotes = adminNotes;
   submission.reviewedBy = adminId;
   submission.reviewedAt = new Date();
   await submission.save();
-  
+
   if (status === 'approved') {
     const user = await userRepo.findUserById(submission.userId);
-    user.wallet += submission.taskId.payoutAmount;
-    await user.save();
+    if (user) {
+      user.wallet += submission.task.payoutAmount;
+      await user.save();
+    }
   }
-  
+
   return submission;
 };
 
@@ -92,20 +105,22 @@ export const getPendingWithdrawals = async () => {
 export const processWithdrawal = async (withdrawalId, status, adminId, transactionId, adminNotes) => {
   const withdrawal = await withdrawalRepo.findWithdrawalById(withdrawalId);
   if (!withdrawal) throw new Error('Withdrawal not found');
-  
+
   withdrawal.status = status;
   withdrawal.transactionId = transactionId;
   withdrawal.adminNotes = adminNotes;
   withdrawal.adminId = adminId;
   withdrawal.processedAt = new Date();
   await withdrawal.save();
-  
+
   if (status === 'approved') {
     const user = await userRepo.findUserById(withdrawal.userId);
-    user.wallet -= withdrawal.amount;
-    await user.save();
+    if (user) {
+      user.wallet -= withdrawal.amount;
+      await user.save();
+    }
   }
-  
+
   return withdrawal;
 };
 

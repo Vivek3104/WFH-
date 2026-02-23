@@ -1,12 +1,17 @@
-import mongoose from 'mongoose';
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
 
-const jobSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  category: String,
-  adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin', required: true },
-  franchiseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Franchise' },
-  isActive: { type: Boolean, default: true }
-}, { timestamps: true });
+const Job = sequelize.define('Job', {
+  id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  title: { type: DataTypes.STRING, allowNull: false },
+  description: { type: DataTypes.TEXT, allowNull: false },
+  category: { type: DataTypes.STRING },
+  // adminId FK and franchiseId FK added via associations in models/index.js
+  isActive: { type: DataTypes.BOOLEAN, defaultValue: true, field: 'is_active' },
+}, {
+  tableName: 'jobs',
+  timestamps: true,
+  underscored: true,
+});
 
-export default mongoose.model('Job', jobSchema);
+export default Job;

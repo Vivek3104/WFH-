@@ -17,3 +17,4 @@ router.post('/withdrawal', authUser, userController.requestWithdrawal);
 router.get('/withdrawals', authUser, userController.getWithdrawals);
 
 export default router;
+ 
