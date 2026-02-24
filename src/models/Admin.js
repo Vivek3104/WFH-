@@ -24,6 +24,7 @@ const Admin = sequelize.define('Admin', {
   gstNumber: { type: DataTypes.STRING, field: 'gst_number' },
   // franchiseId FK added via association in models/index.js
   isApproved: { type: DataTypes.BOOLEAN, defaultValue: false, field: 'is_approved' },
+  isActive: { type: DataTypes.BOOLEAN, defaultValue: true, field: 'is_active' },
   role: {
     type: DataTypes.ENUM('admin', 'superadmin'),
     defaultValue: 'admin',

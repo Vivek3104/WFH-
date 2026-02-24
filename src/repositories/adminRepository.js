@@ -16,3 +16,10 @@ export const updateAdmin = async (id, updateData) => {
   await Admin.update(updateData, { where: { id } });
   return await Admin.findByPk(id);
 };
+
+export const findAllAdmins = async () => {
+  return await Admin.findAll({
+    attributes: { exclude: ['password'] },
+    order: [['createdAt', 'DESC']]
+  });
+};

@@ -1,7 +1,7 @@
 import express from 'express';
 import userRoutes from './userRoutes.js';
 import adminRoutes from './adminRoutes.js';
-import franchiseRoutes from './franchiseRoutes.js';
+import superAdminRoutes from './superAdminRoutes.js';
 import taskRoutes from './taskRoutes.js';
 
 const router = express.Router();
@@ -17,7 +17,7 @@ const router = express.Router();
 
 router.use('/users', userRoutes);   
 router.use('/admin', adminRoutes);
-router.use('/superadmin', franchiseRoutes);
+router.use('/superadmin', superAdminRoutes);
 router.use('/task', taskRoutes);
 
 export default router;
