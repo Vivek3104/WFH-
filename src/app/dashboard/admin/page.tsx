@@ -13,35 +13,41 @@ const AdminDashboard = () => {
                 <Link href="/dashboard/admin/tasks/new" className="btn-primary">+ Create New Task</Link>
             </header>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
-                <StatCard title="Active Tasks" value="24" trend="+3 this week" />
-                <StatCard title="Pending Reviews" value="156" trend="+12 today" highlight />
-                <StatCard title="Total Payouts" value="₹1,24,000" trend="+₹15k this month" />
-                <StatCard title="Total Users" value="1,240" trend="+45 new users" />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+                <StatCard title="Team Tasks" value="128" trend="+12 this month" />
+                <StatCard title="Approval Queue" value="156" trend="+12 today" highlight />
+                <StatCard title="Active Workers" value="242" trend="+15 this week" />
+                <StatCard title="Approved Payouts" value="₹1,24,000" trend="+₹15k this week" />
+                <StatCard title="Rejection Rate" value="4.2%" trend="-0.5% from last week" />
+                <StatCard title="Team Performance" value="92%" trend="Stable" />
             </div>
 
             <section className="card" style={{ padding: '2rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Recent Submissions</h2>
-                    <button style={{ color: 'var(--primary)', background: 'none', border: 'none', fontWeight: 600 }}>Review All</button>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Recent Activity</h2>
+                    <button style={{ color: 'var(--primary)', background: 'none', border: 'none', fontWeight: 600 }}>View All</button>
                 </div>
 
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                    <thead>
-                        <tr style={{ borderBottom: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-                            <th style={{ padding: '1rem 0' }}>USER</th>
-                            <th>TASK</th>
-                            <th>SUBMISSION DATE</th>
-                            <th>STATUS</th>
-                            <th>ACTION</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <TableRow user="Rahul Sharma" task="Data Entry - CRM" date="Today, 10:45 AM" status="Pending" />
-                        <TableRow user="Priya Patel" task="Content Writing" date="Today, 09:30 AM" status="Pending" />
-                        <TableRow user="Amit Kumar" task="Image Tagging" date="Yesterday, 04:20 PM" status="Pending" />
-                    </tbody>
-                </table>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <ActivityItem
+                        user="Rahul Sharma"
+                        action="submitted proof for"
+                        target="Data Entry - CRM"
+                        time="10:45 AM"
+                    />
+                    <ActivityItem
+                        user="Priya Patel"
+                        action="completed"
+                        target="Content Writing Task"
+                        time="09:30 AM"
+                    />
+                    <ActivityItem
+                        user="System"
+                        action="payout processed for"
+                        target="Amit Kumar"
+                        time="Yesterday"
+                    />
+                </div>
             </section>
         </div>
     );
@@ -55,25 +61,23 @@ const StatCard = ({ title, value, trend, highlight = false }: any) => (
     </div>
 );
 
-const TableRow = ({ user, task, date, status }: any) => (
-    <tr style={{ borderBottom: '1px solid var(--border)', fontSize: '0.9rem' }}>
-        <td style={{ padding: '1.25rem 0' }}>{user}</td>
-        <td>{task}</td>
-        <td>{date}</td>
-        <td>
-            <span style={{
-                padding: '0.2rem 0.6rem',
-                borderRadius: '4px',
-                fontSize: '0.75rem',
-                background: 'rgba(245, 158, 11, 0.1)',
-                color: '#f59e0b',
-                border: '1px solid rgba(245, 158, 11, 0.2)'
-            }}>{status}</span>
-        </td>
-        <td>
-            <button style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 600, cursor: 'pointer' }}>Review</button>
-        </td>
-    </tr>
+const ActivityItem = ({ user, action, target, time }: any) => (
+    <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '1rem',
+        borderRadius: '8px',
+        backgroundColor: 'var(--surface-hover)',
+        border: '1px solid var(--border)'
+    }}>
+        <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.9rem' }}>
+            <span style={{ fontWeight: 600 }}>{user}</span>
+            <span style={{ color: 'var(--text-muted)' }}>{action}</span>
+            <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>{target}</span>
+        </div>
+        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{time}</span>
+    </div>
 );
 
 export default AdminDashboard;

@@ -19,17 +19,17 @@ export default function ClientLayout({
 
     return (
         <div className="layout-container">
-            {/* Hide Navbar on Login/Register */}
-            {!isAuthPage && <Navbar />}
+            {/* Hide Navbar on Login/Register/Home */}
+            {!isAuthPage && !isHomePage && <Navbar />}
 
             <div className="main-wrapper">
                 {/* Only show Sidebar on Dashboard pages */}
                 {isDashboard && <Sidebar />}
 
                 <main className="content-area" style={{
-                    // If it's an auth page or home page, remove sidebar padding if needed 
-                    // but the current globals.css handles main-wrapper as a flexbox.
-                    padding: (isAuthPage) ? '0' : '2.5rem'
+                    // If it's an auth page or home page, remove sidebar padding
+                    padding: (isAuthPage || isHomePage) ? '0' : '2.5rem',
+                    maxHeight: (isAuthPage || isHomePage) ? 'none' : 'calc(100vh - 70px)',
                 }}>
                     {children}
                 </main>

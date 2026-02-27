@@ -11,6 +11,12 @@ interface TaskCardProps {
 }
 
 const TaskCard = ({ title, category, payout, deadline, status = 'active' }: TaskCardProps) => {
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
     return (
         <div className="card" style={{
             display: 'flex',
@@ -46,7 +52,9 @@ const TaskCard = ({ title, category, payout, deadline, status = 'active' }: Task
                 </div>
                 <div style={{ textAlign: 'right' }}>
                     <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Deadline</p>
-                    <p style={{ fontSize: '0.9rem', fontWeight: 600 }}>{new Date(deadline).toLocaleDateString()}</p>
+                    <p style={{ fontSize: '0.9rem', fontWeight: 600 }}>
+                        {mounted ? new Date(deadline).toLocaleDateString() : 'Loading...'}
+                    </p>
                 </div>
             </div>
 
