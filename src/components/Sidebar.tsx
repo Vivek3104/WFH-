@@ -9,6 +9,8 @@ const Sidebar = () => {
     const router = useRouter();
     const logout = useAuthStore((state) => state.logout);
 
+    const user = useAuthStore((state) => state.user);
+
     const isAdmin = pathname.startsWith('/dashboard/admin');
     const isSuperAdmin = pathname.startsWith('/dashboard/superadmin');
 
@@ -22,6 +24,12 @@ const Sidebar = () => {
         e.preventDefault();
         logout();
         router.push('/');
+    };
+
+    const handleProfileClick = () => {
+        if (isSuperAdmin) router.push('/dashboard/superadmin/profile');
+        else if (isAdmin) router.push('/dashboard/admin/profile');
+        else router.push('/dashboard/user/profile');
     };
 
     return (
@@ -68,6 +76,7 @@ const Sidebar = () => {
                     <SidebarLink href="/dashboard/user/tasks" icon="📋" label="Available Tasks" active={pathname.startsWith('/dashboard/user/tasks')} />
                     <SidebarLink href="/dashboard/user/history" icon="🕒" label="Work History" active={pathname.startsWith('/dashboard/user/history')} />
                     <SidebarLink href="/dashboard/user/withdrawals" icon="💰" label="Withdrawals" active={pathname.startsWith('/dashboard/user/withdrawals')} />
+                    <SidebarLink href="/dashboard/user/profile" icon="👤" label="My Profile" active={pathname.startsWith('/dashboard/user/profile')} />
                 </>
             )}
 
@@ -95,13 +104,45 @@ const Sidebar = () => {
                     <span>🚪</span>
                     <span>Logout</span>
                 </button>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                        {isSuperAdmin ? 'SA' : isAdmin ? 'AD' : 'JD'}
+                <div
+                    onClick={handleProfileClick}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        cursor: 'pointer',
+                        padding: '0.5rem',
+                        borderRadius: '8px',
+                        transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--surface)'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                    <div style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '50%',
+                        background: 'var(--primary)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 'bold',
+                        overflow: 'hidden'
+                    }}>
+                        {user?.avatar ? (
+                            <img src={user.avatar} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                            user?.name ? user.name.substring(0, 2).toUpperCase() : '??'
+                        )}
                     </div>
-                    <div>
-                        <p style={{ fontSize: '0.85rem', fontWeight: 600 }}>{isSuperAdmin ? 'Super Admin' : isAdmin ? 'Admin User' : 'John Doe'}</p>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{isSuperAdmin ? 'Master Authority' : isAdmin ? 'Administrator' : 'Worker'}</p>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{ fontSize: '0.85rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {user?.name || 'Loading...'}
+                        </p>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                            {user?.role === 'superadmin' ? 'Master Admin' : user?.role === 'admin' ? 'Administrator' : 'Worker'}
+                        </p>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,7 @@ interface User {
     name: string;
     email: string;
     role: 'user' | 'admin' | 'superadmin';
+    avatar?: string;
 }
 
 interface AuthState {
@@ -13,6 +14,7 @@ interface AuthState {
     token: string | null;
     isAuthenticated: boolean;
     setAuth: (user: User, token: string) => void;
+    updateProfile: (updatedData: Partial<User>) => void;
     logout: () => void;
 }
 
@@ -27,6 +29,11 @@ export const useAuthStore = create<AuthState>()(
                 document.cookie = `token=${token}; path=/; max-age=86400; SameSite=Lax`;
                 document.cookie = `role=${user.role}; path=/; max-age=86400; SameSite=Lax`;
                 set({ user, token, isAuthenticated: true });
+            },
+            updateProfile: (updatedData) => {
+                set((state) => ({
+                    user: state.user ? { ...state.user, ...updatedData } : null
+                }));
             },
             logout: () => {
                 // Clear cookies
