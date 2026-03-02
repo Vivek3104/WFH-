@@ -6,12 +6,21 @@ export function middleware(request: NextRequest) {
     const role = request.cookies.get('role')?.value;
     const { pathname } = request.nextUrl;
 
+    // 0. Handle root `/` — redirect to dashboard if logged in, else to /login
+    if (pathname === '/') {
+        if (token && role) {
+            return NextResponse.redirect(new URL(`/dashboard/${role}`, request.url));
+        }
+        return NextResponse.redirect(new URL('/login/user', request.url));
+    }
+
     // 1. Handle Login/Register selection pages (Always accessible)
     if (pathname === '/login' || pathname === '/register') {
         if (token && role) {
             return NextResponse.redirect(new URL(`/dashboard/${role}`, request.url));
         }
-        return NextResponse.next();
+        const target = pathname === '/login' ? '/login/user' : '/register/user';
+        return NextResponse.redirect(new URL(target, request.url));
     }
 
     // 2. Handle Role-specific auth pages (/login/[role], /register/[role])
@@ -28,7 +37,7 @@ export function middleware(request: NextRequest) {
             // If trying to access /dashboard/admin, redirect to /login/admin
             const segments = pathname.split('/');
             const targetRole = segments[2];
-            const redirectPath = targetRole ? `/login/${targetRole}` : '/login';
+            const redirectPath = targetRole ? `/login/${targetRole}` : '/login/user';
             return NextResponse.redirect(new URL(redirectPath, request.url));
         }
 
@@ -51,5 +60,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*', '/login/:path*', '/register/:path*'],
+    matcher: ['/', '/dashboard/:path*', '/login/:path*', '/register/:path*'],
 };

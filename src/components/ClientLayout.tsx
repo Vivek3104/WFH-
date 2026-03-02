@@ -10,27 +10,31 @@ export default function ClientLayout({
 }) {
     const pathname = usePathname();
 
-    // Define routes where elements should be hidden
+    // Routes where we render our own full-page layout (no shared nav/sidebar)
     const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/register');
     const isHomePage = pathname === '/';
-
-    // Dashboard routes usually need the sidebar, except the specific custom user dashboard
-    const isDashboard = pathname.startsWith('/dashboard') && !pathname.startsWith('/dashboard/user');
     const isUserDashboard = pathname.startsWith('/dashboard/user');
+    const isAdminDashboard = pathname.startsWith('/dashboard/admin');
+    const isSuperAdminDashboard = pathname.startsWith('/dashboard/superadmin');
+
+    // Custom-layout dashboards — handle their own chrome
+    const isCustomLayout = isUserDashboard || isAdminDashboard || isSuperAdminDashboard;
+
+    // Only show the legacy sidebar for routes that don't have their own layout
+    const showLegacySidebar = pathname.startsWith('/dashboard') && !isCustomLayout;
+
+    const noChrome = isAuthPage || isHomePage || isCustomLayout;
 
     return (
         <div className="layout-container">
-            {/* Hide Navbar on Login/Register/Home, and custom User Dashboard */}
-            {!isAuthPage && !isHomePage && !isUserDashboard && <Navbar />}
+            {!noChrome && <Navbar />}
 
             <div className="main-wrapper">
-                {/* Only show Sidebar on Dashboard pages, except User Dashboard */}
-                {isDashboard && <Sidebar />}
+                {showLegacySidebar && <Sidebar />}
 
                 <main className="content-area" style={{
-                    // If it's an auth page, home page, or user dashboard, remove padding
-                    padding: (isAuthPage || isHomePage || isUserDashboard) ? '0' : '2.5rem',
-                    maxHeight: (isAuthPage || isHomePage || isUserDashboard) ? 'none' : 'calc(100vh - 70px)',
+                    padding: noChrome ? '0' : '2.5rem',
+                    maxHeight: noChrome ? 'none' : 'calc(100vh - 70px)',
                 }}>
                     {children}
                 </main>

@@ -29,17 +29,18 @@ const RegisterPage = () => {
         setLoading(true);
         setError('');
         try {
-            if (role === 'superadmin') {
-                // Mock registration delay
-                await new Promise(resolve => setTimeout(resolve, 1000));
+            // Admin and Superadmin: no backend registration, redirect to login
+            if (role === 'superadmin' || role === 'admin') {
+                await new Promise(resolve => setTimeout(resolve, 800));
                 router.push(`/login/${role}`);
                 return;
             }
 
+            // User registration via real API
             await authService.register({ name, email, password, role });
             router.push(`/login/${role}`);
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Registration failed.');
+            setError(err.response?.data?.message || 'Registration failed. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -108,16 +109,55 @@ const RegisterPage = () => {
                 {/* Right Panel - Form Content */}
                 <div style={{
                     flex: '1',
-                    padding: '3.5rem 3rem',
+                    padding: '3rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '1.5rem',
                     background: '#1a1a20',
                     color: '#ffffff'
                 }}>
-                    <div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '0.25rem' }}>Create Account</h1>
-                        <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.5)' }}>Enter your details to get started</p>
+                    {/* Role Switcher */}
+                    <div style={{ marginBottom: '2.5rem' }}>
+                        <h2 style={{ fontSize: '0.8rem', fontWeight: 800, marginBottom: '1.25rem', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.15em', textAlign: 'center' }}>JOIN AS</h2>
+                        <div style={{
+                            display: 'flex',
+                            gap: '0.4rem',
+                            background: 'rgba(255,255,255,0.03)',
+                            padding: '0.35rem',
+                            borderRadius: '14px',
+                            border: '1px solid rgba(255,255,255,0.06)'
+                        }}>
+                            {['user', 'admin', 'superadmin'].map((r) => (
+                                <button
+                                    key={r}
+                                    onClick={() => router.push(`/register/${r}`)}
+                                    style={{
+                                        flex: 1,
+                                        padding: '0.65rem 0.4rem',
+                                        borderRadius: '10px',
+                                        fontSize: '0.7rem',
+                                        fontWeight: 700,
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                        background: role === r ? 'var(--primary)' : 'transparent',
+                                        color: role === r ? 'white' : 'rgba(255,255,255,0.4)',
+                                        boxShadow: role === r ? '0 6px 16px -4px rgba(124, 58, 237, 0.4)' : 'none'
+                                    }}
+                                >
+                                    {r.toUpperCase()}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <h1 style={{ fontSize: '1.8rem', fontWeight: 600, marginBottom: '0.25rem' }}>Create Account</h1>
+                        <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.4)' }}>Enter your {role} details</p>
+                        {/* {(role === 'admin' || role === 'superadmin') && (
+                            <p style={{ fontSize: '0.75rem', marginTop: '0.75rem', padding: '0.65rem 0.85rem', background: 'rgba(124,58,237,0.1)', borderRadius: '10px', color: 'rgba(180,160,255,0.8)', border: '1px solid rgba(124,58,237,0.2)' }}>
+                                ℹ️ {role === 'superadmin' ? 'Superadmin' : 'Admin'} accounts use demo credentials. Redirecting to login after signup.
+                            </p>
+                        )} */}
                     </div>
 
                     {error && (
