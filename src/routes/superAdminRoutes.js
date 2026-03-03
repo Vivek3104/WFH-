@@ -4,6 +4,8 @@ import { authSuperAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
+router.post('/register', superAdminController.register);
+router.post('/login', superAdminController.login);
 router.get('/pending-franchises', authSuperAdmin, superAdminController.getPendingFranchises);
 router.post('/approve-franchise', authSuperAdmin, superAdminController.approveFranchise);
 router.get('/franchises', authSuperAdmin, superAdminController.getAllFranchises);

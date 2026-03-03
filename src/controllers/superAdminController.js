@@ -1,6 +1,26 @@
 import * as superAdminService from '../services/superAdminService.js';
 import assignmentService from '../services/assignmentService.js';
 
+export const register = async (req, res) => {
+  try {
+    console.log('Register request body:', req.body);
+    const result = await superAdminService.register(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    console.log('Login request body:', req.body);
+    const result = await superAdminService.login(req.body);
+    res.json(result);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 export const getPendingFranchises = async (req, res) => {
   try {
     const franchises = await superAdminService.getPendingFranchises();
