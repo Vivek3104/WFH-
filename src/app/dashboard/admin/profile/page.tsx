@@ -46,36 +46,7 @@ const AdminProfilePage = () => {
                 <p style={{ color: 'var(--text-muted)' }}>Manage your personal and company information.</p>
             </header>
 
-            <form onSubmit={handleSave} style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem' }}>
-                <section className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', padding: '2rem' }}>
-                    <div style={{
-                        width: '120px',
-                        height: '120px',
-                        borderRadius: '50%',
-                        background: 'var(--primary)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '3rem',
-                        fontWeight: 800,
-                        overflow: 'hidden',
-                        border: '3px solid var(--border)'
-                    }}>
-                        {previewUrl ? (
-                            <img src={previewUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        ) : (
-                            name.substring(0, 2).toUpperCase()
-                        )}
-                    </div>
-
-                    <input type="file" id="admin-avatar" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
-                    <label htmlFor="admin-avatar" style={{ fontSize: '0.85rem', cursor: 'pointer', color: 'var(--primary)', fontWeight: 600 }}>Change Photo</label>
-
-                    <div style={{ textAlign: 'center' }}>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>{name}</h2>
-                        <p style={{ color: 'var(--text-muted)' }}>Main Administrator</p>
-                    </div>
-                </section>
+            <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '800px' }}>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     <section className="card">
