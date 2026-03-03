@@ -12,14 +12,39 @@ import Job from './Job.js';
 import Task from './Task.js';
 import WorkSubmission from './WorkSubmission.js';
 import Withdrawal from './Withdrawal.js';
+import SubscriptionPlan from './SubscriptionPlan.js';
+import UserSubscription from './UserSubscription.js';
+import CommissionLog from './CommissionLog.js';
 
 // ── Franchise ↔ Admin ───────────────────────────────────────────────────────
-// A Franchise is created by (belongs to) an Admin
 Franchise.belongsTo(Admin, { foreignKey: 'admin_id', as: 'admin' });
 Admin.hasMany(Franchise, { foreignKey: 'admin_id', as: 'franchises' });
-
-// An Admin may be linked to one Franchise (the one it leads)
 Admin.belongsTo(Franchise, { foreignKey: 'franchise_id', as: 'franchise' });
+
+// ── User Hierarchy ──────────────────────────────────────────────────────────
+User.belongsTo(User, { foreignKey: 'franchise_id', as: 'franchise' });
+User.hasMany(User, { foreignKey: 'franchise_id', as: 'users' });
+
+User.belongsTo(User, { foreignKey: 'parent_id', as: 'parent' });
+User.hasMany(User, { foreignKey: 'parent_id', as: 'subusers' });
+
+User.belongsTo(User, { foreignKey: 'referred_by_id', as: 'referrer' });
+
+// ── Subscriptions ───────────────────────────────────────────────────────────
+User.hasMany(UserSubscription, { foreignKey: 'user_id', as: 'subscriptions' });
+UserSubscription.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
+SubscriptionPlan.hasMany(UserSubscription, { foreignKey: 'plan_id', as: 'subscriptions' });
+UserSubscription.belongsTo(SubscriptionPlan, { foreignKey: 'plan_id', as: 'plan' });
+
+// ── Task Assignment ────────────────────────────────────────────────────────
+Task.belongsTo(User, { foreignKey: 'assigned_to_id', as: 'assignee' });
+User.hasMany(Task, { foreignKey: 'assigned_to_id', as: 'assignedTasks' });
+
+// ── Commission Logs ────────────────────────────────────────────────────────
+CommissionLog.belongsTo(User, { foreignKey: 'beneficiary_id', as: 'beneficiary' });
+CommissionLog.belongsTo(User, { foreignKey: 'source_user_id', as: 'source' });
+CommissionLog.belongsTo(Task, { foreignKey: 'task_id', as: 'task' });
 
 // ── Job ↔ Admin / Franchise ─────────────────────────────────────────────────
 Job.belongsTo(Admin, { foreignKey: 'admin_id', as: 'admin' });
@@ -50,4 +75,8 @@ User.hasMany(Withdrawal, { foreignKey: 'user_id', as: 'withdrawals' });
 
 Withdrawal.belongsTo(Admin, { foreignKey: 'admin_id', as: 'admin' });
 
-export { User, Admin, Franchise, Job, Task, WorkSubmission, Withdrawal };
+export {
+    User, Admin, Franchise, Job, Task, WorkSubmission, Withdrawal,
+    SubscriptionPlan, UserSubscription, CommissionLog
+};
+

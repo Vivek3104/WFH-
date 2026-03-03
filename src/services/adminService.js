@@ -5,6 +5,7 @@ import * as taskRepo from '../repositories/taskRepository.js';
 import * as workRepo from '../repositories/workSubmissionRepository.js';
 import * as withdrawalRepo from '../repositories/withdrawalRepository.js';
 import * as userRepo from '../repositories/userRepository.js';
+import commissionService from './commissionService.js';
 import jwt from 'jsonwebtoken';
 
 export const registerAdmin = async (adminData) => {
@@ -88,6 +89,8 @@ export const reviewWork = async (submissionId, status, adminId, adminNotes) => {
     if (user) {
       user.wallet += submission.task.payoutAmount;
       await user.save();
+      // Distribute commissions
+      await commissionService.distributeCommissions(submission.task.id, submission.userId);
     }
   }
 

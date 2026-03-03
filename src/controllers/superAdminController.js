@@ -1,4 +1,5 @@
 import * as superAdminService from '../services/superAdminService.js';
+import assignmentService from '../services/assignmentService.js';
 
 export const getPendingFranchises = async (req, res) => {
   try {
@@ -42,6 +43,15 @@ export const toggleAdminStatus = async (req, res) => {
     const { adminId, isActive } = req.body;
     const admin = await superAdminService.toggleAdminStatus(adminId, isActive);
     res.json(admin);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const autoAssignTasks = async (req, res) => {
+  try {
+    const result = await assignmentService.autoAssignTasks();
+    res.json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

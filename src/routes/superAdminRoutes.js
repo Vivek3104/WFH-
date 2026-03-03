@@ -9,5 +9,6 @@ router.post('/approve-franchise', authSuperAdmin, superAdminController.approveFr
 router.get('/franchises', authSuperAdmin, superAdminController.getAllFranchises);
 router.get('/admins', authSuperAdmin, superAdminController.getAllAdmins);
 router.post('/toggle-admin-status', authSuperAdmin, superAdminController.toggleAdminStatus);
+router.post('/auto-assign-tasks', authSuperAdmin, superAdminController.autoAssignTasks);
 
 export default router;

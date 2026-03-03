@@ -35,6 +35,20 @@ const User = sequelize.define('User', {
     }
   },
   wallet: { type: DataTypes.FLOAT, defaultValue: 0 },
+  walletCommission: { type: DataTypes.FLOAT, defaultValue: 0, field: 'wallet_commission' },
+  role: {
+    type: DataTypes.ENUM('franchise', 'user', 'subuser'),
+    defaultValue: 'user',
+  },
+  // Hierarchy
+  franchiseId: { type: DataTypes.INTEGER, field: 'franchise_id' },
+  parentId: { type: DataTypes.INTEGER, field: 'parent_id' },
+  // Referral System
+  referralCode: { type: DataTypes.STRING, unique: true, field: 'referral_code' },
+  referredById: { type: DataTypes.INTEGER, field: 'referred_by_id' },
+  // Company details (for Franchise role)
+  companyName: { type: DataTypes.STRING, field: 'company_name' },
+  registrationNumber: { type: DataTypes.STRING, field: 'registration_number' },
   isActive: { type: DataTypes.BOOLEAN, defaultValue: true, field: 'is_active' },
 }, {
   tableName: 'users',
@@ -43,6 +57,9 @@ const User = sequelize.define('User', {
   hooks: {
     beforeCreate: async (user) => {
       if (user.password) user.password = await bcrypt.hash(user.password, 10);
+      if (!user.referralCode) {
+        user.referralCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+      }
     },
     beforeUpdate: async (user) => {
       if (user.changed('password')) user.password = await bcrypt.hash(user.password, 10);

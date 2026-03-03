@@ -9,6 +9,11 @@ const Task = sequelize.define('Task', {
   payoutAmount: { type: DataTypes.FLOAT, allowNull: false, field: 'payout_amount' },
   maxSubmissions: { type: DataTypes.INTEGER, defaultValue: 1, field: 'max_submissions' },
   deadline: { type: DataTypes.DATE },
+  assignedToId: { type: DataTypes.INTEGER, field: 'assigned_to_id' },
+  status: {
+    type: DataTypes.ENUM('available', 'assigned', 'completed', 'verified'),
+    defaultValue: 'available',
+  },
   isActive: { type: DataTypes.BOOLEAN, defaultValue: true, field: 'is_active' },
 }, {
   tableName: 'tasks',

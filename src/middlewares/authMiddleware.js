@@ -51,3 +51,43 @@ export const authSuperAdmin = async (req, res, next) => {
     res.status(401).json({ error: 'Authentication failed' });
   }
 };
+
+export const authFranchise = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) return res.status(401).json({ error: 'No token provided' });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findByPk(decoded.id);
+    if (!user || user.role !== 'franchise') {
+      return res.status(403).json({ error: 'Access denied. Franchise only.' });
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Authentication failed' });
+  }
+};
+
+export const authAnyAdmin = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) return res.status(401).json({ error: 'No token provided' });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const admin = await Admin.findByPk(decoded.id);
+    const user = await User.findByPk(decoded.id);
+
+    if ((admin && (admin.role === 'admin' || admin.role === 'superadmin')) || (user && user.role === 'franchise')) {
+      req.admin = admin;
+      req.user = user;
+      return next();
+    }
+
+    res.status(403).json({ error: 'Access denied' });
+  } catch (error) {
+    res.status(401).json({ error: 'Authentication failed' });
+  }
+};
+

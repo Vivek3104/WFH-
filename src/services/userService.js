@@ -1,13 +1,37 @@
 import * as userRepo from '../repositories/userRepository.js';
+import { User } from '../models/index.js';
 import * as workRepo from '../repositories/workSubmissionRepository.js';
 import * as withdrawalRepo from '../repositories/withdrawalRepository.js';
 import jwt from 'jsonwebtoken';
 
 export const registerUser = async (userData) => {
+  // Handle referral logic if code is provided
+  if (userData.referralCodeApplied) {
+    const referrer = await User.findOne({ where: { referralCode: userData.referralCodeApplied } });
+    if (referrer) {
+      userData.referredById = referrer.id;
+      userData.franchiseId = referrer.franchiseId || (referrer.role === 'franchise' ? referrer.id : null);
+    }
+  }
+
   const user = await userRepo.createUser(userData);
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
   const { password, ...userWithoutPassword } = user.toJSON();
   return { user: userWithoutPassword, token };
+};
+
+export const registerSubUser = async (parentId, subUserData) => {
+  const parent = await userRepo.findUserById(parentId);
+  if (!parent) throw new Error('Parent user not found');
+
+  const subUser = await userRepo.createUser({
+    ...subUserData,
+    parentId: parent.id,
+    franchiseId: parent.franchiseId || (parent.role === 'franchise' ? parent.id : null),
+    role: 'subuser',
+  });
+
+  return subUser;
 };
 
 export const loginUser = async (email, password) => {
