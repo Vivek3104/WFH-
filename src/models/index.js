@@ -15,6 +15,9 @@ import Withdrawal from './Withdrawal.js';
 import SubscriptionPlan from './SubscriptionPlan.js';
 import UserSubscription from './UserSubscription.js';
 import CommissionLog from './CommissionLog.js';
+import Comment from './Comment.js';
+import Attachment from './Attachment.js';
+import sequelize from '../config/db.js';
 
 // ── Franchise ↔ Admin ───────────────────────────────────────────────────────
 Franchise.belongsTo(Admin, { foreignKey: 'admin_id', as: 'admin' });
@@ -75,8 +78,21 @@ User.hasMany(Withdrawal, { foreignKey: 'user_id', as: 'withdrawals' });
 
 Withdrawal.belongsTo(Admin, { foreignKey: 'admin_id', as: 'admin' });
 
+// ── Comments ───────────────────────────────────────────────────────────────
+Comment.belongsTo(Task, { foreignKey: 'task_id', as: 'task' });
+Task.hasMany(Comment, { foreignKey: 'task_id', as: 'comments' });
+Comment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+User.hasMany(Comment, { foreignKey: 'user_id', as: 'comments' });
+
+// ── Attachments ────────────────────────────────────────────────────────────
+Attachment.belongsTo(Task, { foreignKey: 'task_id', as: 'task' });
+Task.hasMany(Attachment, { foreignKey: 'task_id', as: 'attachments' });
+Attachment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+User.hasMany(Attachment, { foreignKey: 'user_id', as: 'attachments' });
+
 export {
     User, Admin, Franchise, Job, Task, WorkSubmission, Withdrawal,
-    SubscriptionPlan, UserSubscription, CommissionLog
+    SubscriptionPlan, UserSubscription, CommissionLog, Comment, Attachment,
+    sequelize
 };
 

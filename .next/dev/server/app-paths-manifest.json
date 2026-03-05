@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/dashboard/user/page": "app/dashboard/user/page.js",
+  "/dashboard/user/profile/page": "app/dashboard/user/profile/page.js",
+  "/dashboard/user/referral/page": "app/dashboard/user/referral/page.js",
+  "/dashboard/user/tasks/[id]/page": "app/dashboard/user/tasks/[id]/page.js",
+  "/dashboard/user/tasks/page": "app/dashboard/user/tasks/page.js",
+  "/dashboard/user/withdrawals/page": "app/dashboard/user/withdrawals/page.js",
+  "/login/[role]/page": "app/login/[role]/page.js"
+}
