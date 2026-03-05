@@ -50,6 +50,22 @@ const LoginPage = () => {
                 }
             }
 
+            // Mock credentials for user
+            if (role === 'user') {
+                if (email === 'user@wfh.com' && password === 'user123') {
+                    const mockUser = {
+                        id: 'u_1',
+                        name: 'Test User',
+                        role: 'user' as const,
+                        email: 'user@wfh.com'
+                    };
+                    setAuth(mockUser, 'dummy_token_user');
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    router.push('/dashboard/user');
+                    return;
+                }
+            }
+
             // Mock credentials for admin
             if (role === 'admin') {
                 if (email === 'admin@wfh.com' && password === 'admin123') {
@@ -208,16 +224,23 @@ const LoginPage = () => {
                         </div>
                     )}
 
-                    {(role === 'admin' || role === 'superadmin') && !error && (
+                    {(role === 'admin' || role === 'superadmin' || role === 'user') && !error && (
                         <div style={{
                             fontSize: '0.78rem',
                             marginBottom: '1.5rem',
+                            padding: '0.75rem 1rem',
                             background: 'rgba(124,58,237,0.1)',
                             borderRadius: '10px',
                             color: 'rgba(180,160,255,0.8)',
-
+                            border: '1px solid rgba(124,58,237,0.2)'
                         }}>
-                            {/* 🔑 Demo: <strong>{role === 'superadmin' ? 'superadmin@wfh.com' : 'admin@wfh.com'}</strong> / <strong>{role === 'superadmin' ? 'superadmin123' : 'admin123'}</strong> */}
+                            🔑 Demo: <strong>{
+                                role === 'superadmin' ? 'superadmin@wfh.com' :
+                                    role === 'admin' ? 'admin@wfh.com' : 'user@wfh.com'
+                            }</strong> / <strong>{
+                                role === 'superadmin' ? 'superadmin123' :
+                                    role === 'admin' ? 'admin123' : 'user123'
+                            }</strong>
                         </div>
                     )}
 
