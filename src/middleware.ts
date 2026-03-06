@@ -16,18 +16,12 @@ export function middleware(request: NextRequest) {
 
     // 1. Handle Login/Register selection pages (Always accessible)
     if (pathname === '/login' || pathname === '/register') {
-        if (token && role) {
-            return NextResponse.redirect(new URL(`/dashboard/${role}`, request.url));
-        }
         const target = pathname === '/login' ? '/login/user' : '/register/user';
         return NextResponse.redirect(new URL(target, request.url));
     }
 
     // 2. Handle Role-specific auth pages (/login/[role], /register/[role])
     if (pathname.startsWith('/login/') || pathname.startsWith('/register/')) {
-        if (token && role) {
-            return NextResponse.redirect(new URL(`/dashboard/${role}`, request.url));
-        }
         return NextResponse.next();
     }
 

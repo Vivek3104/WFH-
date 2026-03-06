@@ -25,9 +25,9 @@ export const useAuthStore = create<AuthState>()(
             token: null,
             isAuthenticated: false,
             setAuth: (user, token) => {
-                // Set cookies for middleware
-                document.cookie = `token=${token}; path=/; max-age=86400; SameSite=Lax`;
-                document.cookie = `role=${user.role}; path=/; max-age=86400; SameSite=Lax`;
+                // Set cookies for middleware (session-based)
+                document.cookie = `token=${token}; path=/; SameSite=Lax`;
+                document.cookie = `role=${user.role}; path=/; SameSite=Lax`;
                 set({ user, token, isAuthenticated: true });
             },
             updateProfile: (updatedData) => {
