@@ -55,16 +55,16 @@ const UserProfilePage = () => {
     };
 
     return (
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <header style={{ marginBottom: '2.5rem' }}>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff' }}>Profile <span style={{ color: '#A78BFA' }}>Settings</span></h1>
+        <div className="user-profile-page" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <header className="user-profile-header" style={{ marginBottom: '2.5rem' }}>
+                <h1 className="user-profile-title" style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff' }}>Profile <span style={{ color: '#A78BFA' }}>Settings</span></h1>
                 <p style={{ color: '#9CA3AF', marginTop: '0.5rem' }}>Manage your account details, payout methods, and documents.</p>
             </header>
 
-            <form onSubmit={handleSave} style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+            <form onSubmit={handleSave} className="user-profile-layout" style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
 
                 {/* LEFT PROFILE CARD */}
-                <section style={{
+                <section className="user-profile-sidebar" style={{
                     width: '320px',
                     backgroundColor: 'rgba(255,255,255,0.02)',
                     border: '1px solid rgba(255,255,255,0.05)',
@@ -148,23 +148,23 @@ const UserProfilePage = () => {
                 </section>
 
                 {/* RIGHT CARDS */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                <div className="user-profile-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2rem' }}>
 
                     {/* #1: Personal Info Card */}
-                    <section style={{
+                    <section className="user-profile-card" style={{
                         backgroundColor: 'rgba(255,255,255,0.02)',
                         border: '1px solid rgba(255,255,255,0.05)',
                         borderRadius: '24px',
                         padding: '2.5rem'
                     }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <h3 style={{ fontSize: '1.2rem', fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                        <div className="user-profile-card-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', gap: '1rem' }}>
+                            <h3 className="user-profile-card-title" style={{ fontSize: '1.2rem', fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                                 <span style={{ padding: '0.5rem', backgroundColor: 'rgba(167, 139, 250, 0.1)', borderRadius: '8px', color: '#A78BFA' }}><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg></span>
                                 Personal Information
                             </h3>
 
                             {/* Active Toggle */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                            <div className="user-profile-status" style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
                                 <span style={{ color: '#9CA3AF', fontSize: '0.85rem' }}>Status</span>
                                 <div
                                     onClick={() => setIsActive(!isActive)}
@@ -193,7 +193,7 @@ const UserProfilePage = () => {
                             </div>
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                        <div className="user-profile-grid-two" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                             <FormGroup label="Full Name" value={name} onChange={setName} />
                             <FormGroup label="Email Address" value={email} onChange={setEmail} readOnly />
                             <FormGroup label="Phone Number" value={phone} onChange={setPhone} />
@@ -201,7 +201,7 @@ const UserProfilePage = () => {
                     </section>
 
                     {/* #2: Bank Details Card */}
-                    <section style={{
+                    <section className="user-profile-card" style={{
                         backgroundColor: 'rgba(255,255,255,0.02)',
                         border: '1px solid rgba(255,255,255,0.05)',
                         borderRadius: '24px',
@@ -212,7 +212,7 @@ const UserProfilePage = () => {
                             Bank Details
                         </h3>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                        <div className="user-profile-grid-two" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                             <FormGroup label="Account Holder Name" value={accountHolder} onChange={setAccountHolder} />
                             <FormGroup label="Bank Name" value={bankName} onChange={setBankName} />
                             <FormGroup label="Account Number" value={accountNumber} onChange={setAccountNumber} type="password" />
@@ -221,7 +221,7 @@ const UserProfilePage = () => {
                     </section>
 
                     {/* #3: Government Document Card */}
-                    <section style={{
+                    <section className="user-profile-card" style={{
                         backgroundColor: 'rgba(255,255,255,0.02)',
                         border: '1px solid rgba(255,255,255,0.05)',
                         borderRadius: '24px',
@@ -232,7 +232,7 @@ const UserProfilePage = () => {
                             Government ID Document
                         </h3>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr) auto', gap: '1.5rem', alignItems: 'flex-end' }}>
+                        <div className="user-profile-doc-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr) auto', gap: '1.5rem', alignItems: 'flex-end' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                 <label style={{ fontSize: '0.85rem', color: '#9CA3AF', fontWeight: 500 }}>Document Type</label>
                                 <select
@@ -262,6 +262,7 @@ const UserProfilePage = () => {
                             <FormGroup label="Document Number" value={docNumber} onChange={setDocNumber} />
 
                             <button
+                                className="user-profile-upload-button"
                                 type="button"
                                 style={{
                                     height: '50px',
@@ -291,8 +292,9 @@ const UserProfilePage = () => {
                     </section>
 
                     {/* Bottom Action Footer */}
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                    <div className="user-profile-actions" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
                         <button
+                            className="user-profile-save-button"
                             type="submit"
                             disabled={isSaving}
                             style={{
@@ -341,6 +343,79 @@ const UserProfilePage = () => {
                 @keyframes spin {
                     from { transform: rotate(0deg); }
                     to { transform: rotate(360deg); }
+                }
+            `}</style>
+            <style jsx>{`
+                @media (max-width: 1024px) {
+                    .user-profile-layout {
+                        flex-direction: column !important;
+                    }
+
+                    .user-profile-sidebar {
+                        width: 100% !important;
+                        position: static !important;
+                        top: auto !important;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .user-profile-header {
+                        margin-bottom: 1.75rem !important;
+                    }
+
+                    .user-profile-title {
+                        font-size: 1.9rem !important;
+                    }
+
+                    .user-profile-layout {
+                        gap: 1.25rem !important;
+                    }
+
+                    .user-profile-sidebar,
+                    .user-profile-card {
+                        padding: 1.4rem !important;
+                        border-radius: 20px !important;
+                    }
+
+                    .user-profile-card-head {
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        margin-bottom: 1.5rem !important;
+                    }
+
+                    .user-profile-card-title {
+                        font-size: 1.05rem !important;
+                    }
+
+                    .user-profile-status {
+                        justify-content: space-between;
+                    }
+
+                    .user-profile-grid-two,
+                    .user-profile-doc-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+
+                    .user-profile-upload-button,
+                    .user-profile-save-button {
+                        width: 100%;
+                        justify-content: center;
+                    }
+
+                    .user-profile-actions {
+                        justify-content: stretch !important;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .user-profile-title {
+                        font-size: 1.6rem !important;
+                    }
+
+                    .user-profile-sidebar,
+                    .user-profile-card {
+                        padding: 1.1rem !important;
+                    }
                 }
             `}</style>
         </div>

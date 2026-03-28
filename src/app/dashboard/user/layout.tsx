@@ -40,7 +40,7 @@ export default function UserDashboardLayout({
     }, [pathname]);
 
     return (
-        <div style={{
+        <div className="user-dashboard-shell" style={{
             display: 'flex',
             height: '100vh',
             width: '100vw',
@@ -50,7 +50,7 @@ export default function UserDashboardLayout({
             fontFamily: 'var(--font-sans)'
         }}>
             {/* Custom Sidebar */}
-            <aside style={{
+            <aside className="user-dashboard-sidebar" style={{
                 width: '80px',
                 borderRight: '1px solid rgba(255,255,255,0.05)',
                 display: 'flex',
@@ -61,7 +61,7 @@ export default function UserDashboardLayout({
                 zIndex: 10
             }}>
                 {/* Top: traffic dots + avatar grouped */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+                <div className="user-dashboard-sidebar-top" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
                     <div style={{ display: 'flex', gap: '4px' }}>
                         <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#EF4444' }} />
                         <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
@@ -83,7 +83,7 @@ export default function UserDashboardLayout({
                     </div>
                 </div>
 
-                <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', width: '100%', alignItems: 'center' }}>
+                <nav className="user-dashboard-sidebar-nav" style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', width: '100%', alignItems: 'center' }}>
                     {sidebarItems.map((item) => (
                         <Link
                             key={item.name}
@@ -123,7 +123,7 @@ export default function UserDashboardLayout({
                 </nav>
 
                 {/* Logout Button at bottom */}
-                <div style={{ marginTop: 'auto' }}>
+                <div className="user-dashboard-logout-wrap" style={{ marginTop: 'auto' }}>
                     <button
                         onClick={handleLogout}
                         title="Logout"
@@ -158,23 +158,23 @@ export default function UserDashboardLayout({
             </aside>
 
             {/* Main Content Area Wrapper */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <div className="user-dashboard-main-wrap" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                 {/* Topbar */}
-                <header style={{
+                <header className="user-dashboard-topbar" style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '1.5rem 2.5rem',
                     borderBottom: '1px solid rgba(255,255,255,0.05)'
                 }}>
-                    <nav style={{ display: 'flex', gap: '2rem' }}>
+                    <nav className="user-dashboard-topnav" style={{ display: 'flex', gap: '2rem' }}>
                         <Link href="/dashboard/user" style={{ color: '#fff', fontWeight: 600, fontSize: '1.1rem', textDecoration: 'none' }}>Overview</Link>
                         <Link href="/dashboard/user/history" style={{ color: '#6B7280', fontWeight: 500, fontSize: '1.1rem', textDecoration: 'none' }}>History</Link>
                         <Link href="/dashboard/user/tasks" style={{ color: '#6B7280', fontWeight: 500, fontSize: '1.1rem', textDecoration: 'none' }}>Tasks</Link>
                     </nav>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                        <div style={{
+                    <div className="user-dashboard-topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                        <div className="user-dashboard-search" style={{
                             position: 'relative',
                             backgroundColor: 'rgba(255,255,255,0.03)',
                             borderRadius: '24px',
@@ -218,10 +218,118 @@ export default function UserDashboardLayout({
                     </div>
                 </header>
 
-                <main style={{ flex: 1, padding: '2.5rem', overflowY: 'auto' }} className="custom-scrollbar">
+                <main style={{ flex: 1, padding: '2.5rem', overflowY: 'auto' }} className="custom-scrollbar user-dashboard-main">
                     {children}
                 </main>
             </div>
+            <style jsx>{`
+                @media (max-width: 1024px) {
+                    .user-dashboard-topbar {
+                        padding: 1.25rem 1.5rem !important;
+                        gap: 1rem;
+                    }
+
+                    .user-dashboard-topbar-actions {
+                        gap: 1rem !important;
+                    }
+
+                    .user-dashboard-search {
+                        width: 220px !important;
+                    }
+
+                    .user-dashboard-main {
+                        padding: 1.5rem !important;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .user-dashboard-shell {
+                        flex-direction: column !important;
+                        height: auto !important;
+                        min-height: 100vh;
+                        width: 100% !important;
+                        overflow: auto !important;
+                    }
+
+                    .user-dashboard-sidebar {
+                        width: 100% !important;
+                        border-right: none !important;
+                        border-bottom: 1px solid rgba(255,255,255,0.05);
+                        flex-direction: row !important;
+                        align-items: center !important;
+                        gap: 0.75rem;
+                        padding: 0.9rem 1rem !important;
+                        overflow-x: auto;
+                    }
+
+                    .user-dashboard-sidebar-top {
+                        flex-direction: row !important;
+                        margin-bottom: 0 !important;
+                        flex-shrink: 0;
+                    }
+
+                    .user-dashboard-sidebar-nav {
+                        flex-direction: row !important;
+                        width: auto !important;
+                        align-items: center !important;
+                        flex: 1;
+                        justify-content: flex-start;
+                        overflow-x: auto;
+                    }
+
+                    .user-dashboard-logout-wrap {
+                        margin-top: 0 !important;
+                        margin-left: auto;
+                        flex-shrink: 0;
+                    }
+
+                    .user-dashboard-main-wrap {
+                        overflow: visible !important;
+                    }
+
+                    .user-dashboard-topbar {
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        padding: 1rem !important;
+                    }
+
+                    .user-dashboard-topnav {
+                        gap: 1rem !important;
+                        overflow-x: auto;
+                        padding-bottom: 0.25rem;
+                    }
+
+                    .user-dashboard-topbar-actions {
+                        gap: 0.75rem !important;
+                        width: 100%;
+                    }
+
+                    .user-dashboard-search {
+                        width: 100% !important;
+                        flex: 1;
+                    }
+
+                    .user-dashboard-main {
+                        padding: 1rem !important;
+                        overflow: visible !important;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .user-dashboard-topnav a {
+                        font-size: 1rem !important;
+                    }
+
+                    .user-dashboard-topbar-actions {
+                        flex-wrap: wrap;
+                    }
+
+                    .user-dashboard-search {
+                        order: 1;
+                        width: 100% !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 }
