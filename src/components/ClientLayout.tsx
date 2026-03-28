@@ -26,16 +26,16 @@ export default function ClientLayout({
     const noChrome = isAuthPage || isHomePage || isCustomLayout;
 
     return (
-        <div className="layout-container">
+        <div className="flex min-h-screen flex-col">
             {!noChrome && <Navbar />}
 
-            <div className="main-wrapper">
+            <div className="flex flex-1 flex-col lg:flex-row">
                 {showLegacySidebar && <Sidebar />}
 
-                <main className="content-area" style={{
-                    padding: noChrome ? '0' : '2.5rem',
-                    maxHeight: noChrome ? 'none' : 'calc(100vh - 70px)',
-                }}>
+                <main
+                    className={`flex-1 overflow-y-auto bg-background ${noChrome ? 'p-0 max-h-none' : 'p-6 lg:p-10 lg:max-h-[calc(100vh-70px)]'
+                        }`}
+                >
                     {children}
                 </main>
             </div>

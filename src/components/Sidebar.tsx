@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
@@ -8,7 +7,6 @@ const Sidebar = () => {
     const pathname = usePathname();
     const router = useRouter();
     const logout = useAuthStore((state) => state.logout);
-
     const user = useAuthStore((state) => state.user);
 
     const isAdmin = pathname.startsWith('/dashboard/admin');
@@ -32,115 +30,87 @@ const Sidebar = () => {
         else router.push('/dashboard/user/profile');
     };
 
+    const superAdminLinks = [
+        { href: '/dashboard/superadmin', label: 'Overview', icon: 'OV' },
+        { href: '/dashboard/superadmin/admins', label: 'Administrators', icon: 'AD' },
+        { href: '/dashboard/superadmin/tasks', label: 'Global Tasks', icon: 'TS' },
+        { href: '/dashboard/superadmin/submissions', label: 'All Submissions', icon: 'SB' },
+        { href: '/dashboard/superadmin/users', label: 'Platform Users', icon: 'US' },
+        { href: '/dashboard/superadmin/payouts', label: 'Platform Payouts', icon: 'PY' },
+        { href: '/dashboard/superadmin/system', label: 'System Settings', icon: 'ST' },
+        { href: '/dashboard/superadmin/profile', label: 'My Profile', icon: 'PR' },
+    ];
+
+    const adminLinks = [
+        { href: '/dashboard/admin', label: 'Dashboard', icon: 'DB' },
+        { href: '/dashboard/admin/tasks', label: 'Manage Tasks', icon: 'TS' },
+        { href: '/dashboard/admin/submissions', label: 'Submissions', icon: 'SB' },
+        { href: '/dashboard/admin/users', label: 'Workers List', icon: 'WK' },
+        { href: '/dashboard/admin/payouts', label: 'Withdrawals', icon: 'WD' },
+        { href: '/dashboard/admin/reports', label: 'Daily Reports', icon: 'RP' },
+        { href: '/dashboard/admin/profile', label: 'Admin Profile', icon: 'PR' },
+        { href: '/dashboard/admin/settings', label: 'Settings', icon: 'ST' },
+    ];
+
+    const userLinks = [
+        { href: '/dashboard/user', label: 'Overview', icon: 'OV' },
+        { href: '/dashboard/user/tasks', label: 'Available Tasks', icon: 'TS' },
+        { href: '/dashboard/user/history', label: 'Work History', icon: 'HS' },
+        { href: '/dashboard/user/withdrawals', label: 'Withdrawals', icon: 'WD' },
+        { href: '/dashboard/user/profile', label: 'My Profile', icon: 'PR' },
+    ];
+
+    const links = isSuperAdmin ? superAdminLinks : isAdmin ? adminLinks : userLinks;
+
     return (
-        <aside style={{
-            width: '260px',
-            borderRight: '1px solid var(--border)',
-            padding: '2rem 1rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.5rem',
-            backgroundColor: 'var(--background)'
-        }}>
-            <div style={{ padding: '0 1rem', marginBottom: '1rem' }}>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
+        <aside className="flex w-full shrink-0 flex-col border-b border-border bg-background px-4 py-6 lg:w-[260px] lg:border-b-0 lg:border-r lg:px-4">
+            <div className="mb-4 px-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">
                     {getMenuTitle()}
                 </p>
             </div>
 
-            {isSuperAdmin ? (
-                <>
-                    <SidebarLink href="/dashboard/superadmin" icon="📊" label="Overview" active={pathname === '/dashboard/superadmin'} />
-                    <SidebarLink href="/dashboard/superadmin/admins" icon="🛡️" label="Administrators" active={pathname.startsWith('/dashboard/superadmin/admins')} />
-                    <SidebarLink href="/dashboard/superadmin/tasks" icon="📋" label="Global Tasks" active={pathname.startsWith('/dashboard/superadmin/tasks')} />
-                    <SidebarLink href="/dashboard/superadmin/submissions" icon="📩" label="All Submissions" active={pathname.startsWith('/dashboard/superadmin/submissions')} />
-                    <SidebarLink href="/dashboard/superadmin/users" icon="👥" label="Platform Users" active={pathname.startsWith('/dashboard/superadmin/users')} />
-                    <SidebarLink href="/dashboard/superadmin/payouts" icon="💰" label="Platform Payouts" active={pathname.startsWith('/dashboard/superadmin/payouts')} />
-                    <SidebarLink href="/dashboard/superadmin/system" icon="⚙️" label="System Settings" active={pathname.startsWith('/dashboard/superadmin/system')} />
-                    <SidebarLink href="/dashboard/superadmin/profile" icon="👤" label="My Profile" active={pathname.startsWith('/dashboard/superadmin/profile')} />
-                </>
-            ) : isAdmin ? (
-                <>
-                    <SidebarLink href="/dashboard/admin" icon="📊" label="Dashboard" active={pathname === '/dashboard/admin'} />
-                    <SidebarLink href="/dashboard/admin/tasks" icon="📋" label="Manage Tasks" active={pathname.startsWith('/dashboard/admin/tasks')} />
-                    <SidebarLink href="/dashboard/admin/submissions" icon="📩" label="Submissions" active={pathname.startsWith('/dashboard/admin/submissions')} />
-                    <SidebarLink href="/dashboard/admin/users" icon="👥" label="Workers List" active={pathname.startsWith('/dashboard/admin/users')} />
-                    <SidebarLink href="/dashboard/admin/payouts" icon="💰" label="Withdrawals" active={pathname.startsWith('/dashboard/admin/payouts')} />
-                    <SidebarLink href="/dashboard/admin/reports" icon="📈" label="Daily Reports" active={pathname.startsWith('/dashboard/admin/reports')} />
-                    <SidebarLink href="/dashboard/admin/profile" icon="👤" label="Admin Profile" active={pathname.startsWith('/dashboard/admin/profile')} />
-                    <SidebarLink href="/dashboard/admin/settings" icon="⚙️" label="Settings" active={pathname.startsWith('/dashboard/admin/settings')} />
-                </>
-            ) : (
-                <>
-                    <SidebarLink href="/dashboard/user" icon="🏠" label="Overview" active={pathname === '/dashboard/user'} />
-                    <SidebarLink href="/dashboard/user/tasks" icon="📋" label="Available Tasks" active={pathname.startsWith('/dashboard/user/tasks')} />
-                    <SidebarLink href="/dashboard/user/history" icon="🕒" label="Work History" active={pathname.startsWith('/dashboard/user/history')} />
-                    <SidebarLink href="/dashboard/user/withdrawals" icon="💰" label="Withdrawals" active={pathname.startsWith('/dashboard/user/withdrawals')} />
-                    <SidebarLink href="/dashboard/user/profile" icon="👤" label="My Profile" active={pathname.startsWith('/dashboard/user/profile')} />
-                </>
-            )}
+            <div className="flex flex-col gap-1">
+                {links.map((link) => (
+                    <SidebarLink
+                        key={link.href}
+                        href={link.href}
+                        icon={link.icon}
+                        label={link.label}
+                        active={link.href === '/dashboard/user' || link.href === '/dashboard/admin' || link.href === '/dashboard/superadmin'
+                            ? pathname === link.href
+                            : pathname.startsWith(link.href)}
+                    />
+                ))}
+            </div>
 
-            <div style={{ marginTop: 'auto', padding: '1rem', borderTop: '1px solid var(--border)' }}>
+            <div className="mt-6 border-t border-border p-4 lg:mt-auto">
                 <button
                     onClick={handleLogout}
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.75rem',
-                        padding: '0.75rem 1rem',
-                        borderRadius: '8px',
-                        fontSize: '0.9rem',
-                        color: '#f43f5e',
-                        marginBottom: '1rem',
-                        background: 'none',
-                        border: 'none',
-                        width: '100%',
-                        cursor: 'pointer',
-                        textAlign: 'left'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(244, 63, 94, 0.05)'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    className="mb-4 flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm text-rose-500 transition hover:bg-rose-500/5"
                 >
-                    <span>🚪</span>
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-500/10 text-[11px] font-bold">
+                        LO
+                    </span>
                     <span>Logout</span>
                 </button>
+
                 <div
                     onClick={handleProfileClick}
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.75rem',
-                        cursor: 'pointer',
-                        padding: '0.5rem',
-                        borderRadius: '8px',
-                        transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--surface)'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    className="flex cursor-pointer items-center gap-3 rounded-lg p-2 transition hover:bg-surface"
                 >
-                    <div style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        background: 'var(--primary)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 'bold',
-                        overflow: 'hidden'
-                    }}>
+                    <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-primary font-bold text-white">
                         {user?.avatar ? (
-                            <img src={user.avatar} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src={user.avatar} alt="Avatar" className="h-full w-full object-cover" />
                         ) : (
                             user?.name ? user.name.substring(0, 2).toUpperCase() : '??'
                         )}
                     </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                        <p style={{ fontSize: '0.85rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-foreground">
                             {user?.name || 'Loading...'}
                         </p>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                        <p className="text-xs text-muted">
                             {user?.role === 'superadmin' ? 'Master Admin' : user?.role === 'admin' ? 'Administrator' : 'Worker'}
                         </p>
                     </div>
@@ -150,29 +120,28 @@ const Sidebar = () => {
     );
 };
 
-const SidebarLink = ({ href, icon, label, active }: { href: string; icon: string; label: string; active?: boolean }) => (
-    <Link href={href} style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-        padding: '0.75rem 1rem',
-        borderRadius: '8px',
-        transition: 'all 0.2s ease',
-        fontSize: '0.9rem',
-        color: active ? 'var(--foreground)' : 'var(--text-muted)',
-        backgroundColor: active ? 'var(--surface)' : 'transparent',
-    }} onMouseEnter={(e) => {
-        if (!active) {
-            e.currentTarget.style.backgroundColor = 'var(--surface)';
-            e.currentTarget.style.color = 'var(--foreground)';
-        }
-    }} onMouseLeave={(e) => {
-        if (!active) {
-            e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = 'var(--text-muted)';
-        }
-    }}>
-        <span>{icon}</span>
+const SidebarLink = ({
+    href,
+    icon,
+    label,
+    active,
+}: {
+    href: string;
+    icon: string;
+    label: string;
+    active?: boolean;
+}) => (
+    <Link
+        href={href}
+        className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm transition ${active
+            ? 'bg-surface text-foreground'
+            : 'text-muted hover:bg-surface hover:text-foreground'
+            }`}
+    >
+        <span className={`inline-flex h-7 w-7 items-center justify-center rounded-md text-[11px] font-bold ${active ? 'bg-primary/15 text-primary' : 'bg-white/5 text-muted'
+            }`}>
+            {icon}
+        </span>
         <span>{label}</span>
     </Link>
 );
