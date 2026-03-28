@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 
+
 type ReferralNode = {
   id: number;
   name: string;
@@ -88,14 +89,14 @@ const collectMembers = (
     members.push({
       ...child,
       level,
-      sponsorName,
+      sponsorName, 
     });
     members.push(...collectMembers(child, level + 1, child.name));
   }
 
   return members;
 };
-
+ 
 const collectParentOptions = (node: ReferralNode): Pick<ReferralNode, 'id' | 'name'>[] => {
   const options = [{ id: node.id, name: node.name }];
 
