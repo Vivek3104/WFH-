@@ -3,13 +3,13 @@ import React from 'react';
 
 const SystemSettingsPage = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div className="responsive-page">
             <header>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>System <span className="gradient-text">Control</span></h1>
-                <p style={{ color: 'var(--text-muted)' }}>Global platform configurations and maintenance tools.</p>
+                <h1 className="responsive-title">System <span className="gradient-text">Control</span></h1>
+                <p className="responsive-subtitle">Global platform configurations and maintenance tools.</p>
             </header>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
                 <section className="card shadow-lg">
                     <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <span>💰</span> Financial Configuration
@@ -57,7 +57,7 @@ const SettingField = ({ label, value, description }: any) => (
 );
 
 const ToggleSetting = ({ label, description, checked }: any) => (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
         <div>
             <p style={{ fontSize: '0.9rem', fontWeight: 600 }}>{label}</p>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{description}</p>

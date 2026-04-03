@@ -3,13 +3,14 @@ import React from 'react';
 
 const SubmissionsPage = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div className="responsive-page">
             <header>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>User <span className="gradient-text">Submissions</span></h1>
-                <p style={{ color: 'var(--text-muted)' }}>Review and process work submitted by users.</p>
+                <h1 className="responsive-title">User <span className="gradient-text">Submissions</span></h1>
+                <p className="responsive-subtitle">Review and process work submitted by users.</p>
             </header>
 
             <section className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                <div className="responsive-table">
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                     <thead>
                         <tr style={{ background: 'var(--surface-hover)', borderBottom: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
@@ -45,6 +46,7 @@ const SubmissionsPage = () => {
                         />
                     </tbody>
                 </table>
+                </div>
             </section>
         </div>
     );

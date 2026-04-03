@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
-import { authService, adminService } from '@/services/api';
+import { authService, adminService, superadminService, normalizeAuthUser } from '@/services/api';
 import { useAuthStore } from '@/store/authStore';
 
 const LoginPage = () => {
@@ -30,78 +30,29 @@ const LoginPage = () => {
         setLoading(true);
         setError('');
         try {
-            // Mock credentials for superadmin
             if (role === 'superadmin') {
-                if (email === 'superadmin@wfh.com' && password === 'superadmin123') {
-                    const mockUser = {
-                        id: 'sa_1',
-                        name: 'System Admin',
-                        role: 'superadmin' as const,
-                        email: 'superadmin@wfh.com'
-                    };
-                    setAuth(mockUser, 'dummy_token_superadmin');
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    router.push('/dashboard/superadmin');
-                    return;
-                } else {
-                    setError('Invalid superadmin credentials. Use superadmin@wfh.com / superadmin123');
-                    setLoading(false);
-                    return;
-                }
+                const response = await superadminService.login({ email, password });
+                const { admin, token } = response.data;
+                setAuth(normalizeAuthUser(admin), token);
+                router.push('/dashboard/superadmin');
+                return;
             }
 
-            // Mock credentials for user
-            if (role === 'user') {
-                if (email === 'user@wfh.com' && password === 'user123') {
-                    const mockUser = {
-                        id: 'u_1',
-                        name: 'Test User',
-                        role: 'user' as const,
-                        email: 'user@wfh.com'
-                    };
-                    setAuth(mockUser, 'dummy_token_user');
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    router.push('/dashboard/user');
-                    return;
-                }
-            }
-
-            // Mock credentials for admin
             if (role === 'admin') {
-                if (email === 'admin@wfh.com' && password === 'admin123') {
-                    const mockUser = {
-                        id: 'ad_1',
-                        name: 'Operation Admin',
-                        role: 'admin' as const,
-                        email: 'admin@wfh.com'
-                    };
-                    setAuth(mockUser, 'dummy_token_admin');
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    router.push('/dashboard/admin');
-                    return;
-                } else {
-                    // Try real backend for admin
-                    try {
-                        const response = await adminService.login({ email, password });
-                        const { user, token } = response.data;
-                        setAuth(user, token);
-                        router.push(`/dashboard/admin`);
-                        return;
-                    } catch {
-                        setError('Invalid admin credentials. Use admin@wfh.com / admin123');
-                        setLoading(false);
-                        return;
-                    }
-                }
+                const response = await adminService.login({ email, password });
+                const { admin, token } = response.data;
+                setAuth(normalizeAuthUser(admin), token);
+                router.push('/dashboard/admin');
+                return;
             }
 
-            // User login via real API
-            const response = await authService.login({ email, password, role });
+            const response = await authService.login({ email, password });
             const { user, token } = response.data;
-            setAuth(user, token);
-            router.push(`/dashboard/${user.role}`);
+            const normalizedUser = normalizeAuthUser(user);
+            setAuth(normalizedUser, token);
+            router.push(`/dashboard/${normalizedUser.role}`);
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Login failed. Check your credentials.');
+            setError(err.response?.data?.error || err.response?.data?.message || 'Login failed. Check your credentials.');
         } finally {
             setLoading(false);
         }

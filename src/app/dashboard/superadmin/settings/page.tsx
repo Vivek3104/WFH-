@@ -3,10 +3,10 @@ import React from 'react';
 
 const SettingsPage = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div className="responsive-page">
             <header>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Super Admin <span className="gradient-text">Settings</span></h1>
-                <p style={{ color: 'var(--text-muted)' }}>Configure platform preferences and security.</p>
+                <h1 className="responsive-title">Super Admin <span className="gradient-text">Settings</span></h1>
+                <p className="responsive-subtitle">Configure platform preferences and security.</p>
             </header>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
@@ -33,7 +33,7 @@ const SettingsPage = () => {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                             <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Admin API Key</label>
-                            <div style={{ display: 'flex', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                                 <input
                                     type="text"
                                     readOnly
@@ -75,7 +75,7 @@ const FormGroup = ({ label, type = "text" }: any) => (
 );
 
 const ToggleGroup = ({ label, description, defaultChecked }: any) => (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', borderBottom: '1px solid var(--border)' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', borderBottom: '1px solid var(--border)', gap: '1rem', flexWrap: 'wrap' }}>
         <div>
             <p style={{ fontWeight: 600 }}>{label}</p>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{description}</p>

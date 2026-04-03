@@ -3,13 +3,13 @@ import React from 'react';
 
 const PayoutsPage = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div className="responsive-page">
             <header>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Platform <span className="gradient-text">Payouts</span></h1>
-                <p style={{ color: 'var(--text-muted)' }}>Manage withdrawal requests and payment status.</p>
+                <h1 className="responsive-title">Platform <span className="gradient-text">Payouts</span></h1>
+                <p className="responsive-subtitle">Manage withdrawal requests and payment status.</p>
             </header>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
                 <div className="card">
                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Pending Payouts</p>
                     <h3 style={{ fontSize: '1.8rem', fontWeight: 800 }}>₹45,000</h3>
@@ -25,6 +25,7 @@ const PayoutsPage = () => {
             </div>
 
             <section className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                <div className="responsive-table">
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                     <thead>
                         <tr style={{ background: 'var(--surface-hover)', borderBottom: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
@@ -60,6 +61,7 @@ const PayoutsPage = () => {
                         />
                     </tbody>
                 </table>
+                </div>
             </section>
         </div>
     );

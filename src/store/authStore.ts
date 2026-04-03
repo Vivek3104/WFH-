@@ -7,6 +7,11 @@ interface User {
     email: string;
     role: 'user' | 'admin' | 'superadmin';
     avatar?: string;
+    phone?: string;
+    companyName?: string;
+    registrationNumber?: string;
+    gstNumber?: string;
+    address?: string;
 }
 
 interface AuthState {
@@ -28,6 +33,7 @@ export const useAuthStore = create<AuthState>()(
                 // Set cookies for middleware (session-based)
                 document.cookie = `token=${token}; path=/; SameSite=Lax`;
                 document.cookie = `role=${user.role}; path=/; SameSite=Lax`;
+                localStorage.setItem('token', token);
                 set({ user, token, isAuthenticated: true });
             },
             updateProfile: (updatedData) => {
@@ -39,6 +45,7 @@ export const useAuthStore = create<AuthState>()(
                 // Clear cookies
                 document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 document.cookie = "role=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                localStorage.removeItem('token');
                 set({ user: null, token: null, isAuthenticated: false });
             },
         }),

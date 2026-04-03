@@ -3,13 +3,13 @@ import React from 'react';
 
 const ProfilePage = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div className="responsive-page">
             <header>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Super Admin <span className="gradient-text">Profile</span></h1>
-                <p style={{ color: 'var(--text-muted)' }}>Manage your personal and company information.</p>
+                <h1 className="responsive-title">Super Admin <span className="gradient-text">Profile</span></h1>
+                <p className="responsive-subtitle">Manage your personal and company information.</p>
             </header>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
                 <section className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', padding: '2rem' }}>
                     <div style={{ width: '120px', height: '120px', borderRadius: '50%', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', fontWeight: 800 }}>AD</div>
                     <div style={{ textAlign: 'center' }}>
@@ -21,7 +21,7 @@ const ProfilePage = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     <section className="card">
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>Personal Details</h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="responsive-form-grid-2">
                             <FormGroup label="Full Name" value="Admin User" />
                             <FormGroup label="Email" value="admin@wfh.com" />
                             <FormGroup label="Phone" value="+91 9876543210" />
@@ -30,7 +30,7 @@ const ProfilePage = () => {
 
                     <section className="card">
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>Company Details</h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="responsive-form-grid-2">
                             <FormGroup label="Company Name" value="WFH Platforms Pvt Ltd" />
                             <FormGroup label="Registration ID" value="REG-12345678" />
                             <FormGroup label="GSTIN" value="27AAAAA0000A1Z5" />
@@ -39,7 +39,7 @@ const ProfilePage = () => {
 
                     <section className="card">
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>Company Documents</h3>
-                        <div style={{ display: 'flex', gap: '1rem' }}>
+                        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                             <DocCard name="Registration_Cert.pdf" date="Uploaded Jan 10, 2024" />
                             <DocCard name="GST_Certificate.pdf" date="Uploaded Jan 10, 2024" />
                         </div>

@@ -4,16 +4,16 @@ import Link from 'next/link';
 
 const TasksPage = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="responsive-page">
+            <header className="responsive-header">
                 <div>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Manage <span className="gradient-text">Tasks</span></h1>
-                    <p style={{ color: 'var(--text-muted)' }}>Create, edit, and track all platform tasks.</p>
+                    <h1 className="responsive-title">Manage <span className="gradient-text">Tasks</span></h1>
+                    <p className="responsive-subtitle">Create, edit, and track all platform tasks.</p>
                 </div>
                 <Link href="/dashboard/superadmin/tasks/new" className="btn-primary">+ Create Task</Link>
             </header>
 
-            <div className="card" style={{ display: 'flex', gap: '1rem', padding: '1rem' }}>
+            <div className="card" style={{ display: 'flex', gap: '1rem', padding: '1rem', flexWrap: 'wrap' }}>
                 <input
                     type="text"
                     placeholder="Search tasks..."
@@ -32,7 +32,8 @@ const TasksPage = () => {
                     border: '1px solid var(--border)',
                     borderRadius: '8px',
                     color: 'white',
-                    width: '150px'
+                    width: '150px',
+                    minHeight: '44px'
                 }}>
                     <option>All Status</option>
                     <option>Active</option>
@@ -43,6 +44,7 @@ const TasksPage = () => {
             </div>
 
             <section className="card" style={{ padding: '0', overflow: 'hidden' }}>
+                <div className="responsive-table">
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                     <thead>
                         <tr style={{ background: 'var(--surface-hover)', borderBottom: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
@@ -82,6 +84,7 @@ const TasksPage = () => {
                         />
                     </tbody>
                 </table>
+                </div>
             </section>
         </div>
     );

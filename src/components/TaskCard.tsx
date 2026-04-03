@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 
 interface TaskCardProps {
+    id: string;
     title: string;
     category: string;
     payout: number;
@@ -10,7 +11,7 @@ interface TaskCardProps {
     status?: 'pending' | 'active' | 'completed';
 }
 
-const TaskCard = ({ title, category, payout, deadline, status = 'active' }: TaskCardProps) => {
+const TaskCard = ({ id, title, category, payout, deadline, status = 'active' }: TaskCardProps) => {
     const [mounted, setMounted] = React.useState(false);
 
     React.useEffect(() => {
@@ -45,12 +46,12 @@ const TaskCard = ({ title, category, payout, deadline, status = 'active' }: Task
 
             <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0.5rem 0' }}>{title}</h3>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', gap: '1rem', flexWrap: 'wrap' }}>
                 <div>
                     <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Payout</p>
                     <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--foreground)' }}>₹{payout}</p>
                 </div>
-                <div style={{ textAlign: 'right' }}>
+                <div style={{ textAlign: 'right', marginLeft: 'auto' }}>
                     <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Deadline</p>
                     <p style={{ fontSize: '0.9rem', fontWeight: 600 }}>
                         {mounted ? new Date(deadline).toLocaleDateString() : 'Loading...'}
@@ -59,7 +60,7 @@ const TaskCard = ({ title, category, payout, deadline, status = 'active' }: Task
             </div>
 
             <Link
-                href={`/dashboard/user/tasks/${title.toLowerCase().replace(/ /g, '-')}`}
+                href={`/dashboard/user/tasks/${id}`}
                 className="btn-primary"
                 style={{ width: '100%', marginTop: '1rem', padding: '0.6rem', textAlign: 'center', display: 'block' }}
             >

@@ -102,15 +102,15 @@ export default function AdminDashboard() {
     const { user } = useAuthStore();
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', width: '100%' }}>
+        <div className="responsive-page" style={{ width: '100%' }}>
 
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+            <div className="responsive-header" style={{ alignItems: 'flex-start' }}>
                 <div>
                     <p style={{ fontSize: '0.8rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.25rem' }}>
                         Welcome back, {user?.name || 'Admin'} 👋
                     </p>
-                    <h1 style={{ fontSize: '2rem', fontWeight: 800, lineHeight: 1.1 }}>
+                    <h1 className="responsive-title" style={{ lineHeight: 1.1 }}>
                         Admin{' '}
                         <span style={{ background: 'linear-gradient(90deg,#A78BFA,#60A5FA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                             Console
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Two-column section */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
 
                 {/* Recent Activity */}
                 <div style={{ ...glassCard, padding: '1.75rem' }}>

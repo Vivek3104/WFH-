@@ -47,27 +47,9 @@ export default function SuperadminDashboardLayout({
     }, [pathname]);
 
     return (
-        <div style={{
-            display: 'flex',
-            height: '100vh',
-            width: '100vw',
-            backgroundColor: '#0B0F19',
-            color: '#ffffff',
-            overflow: 'hidden',
-            fontFamily: 'var(--font-sans)'
-        }}>
+        <div className="dashboard-shell">
             {/* Icon Sidebar */}
-            <aside style={{
-                width: '80px',
-                borderRight: '1px solid rgba(255,255,255,0.05)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: '1.25rem 0',
-                backgroundColor: '#0B0F19',
-                zIndex: 10,
-                flexShrink: 0,
-            }}>
+            <aside className="dashboard-sidebar">
                 {/* Top: traffic dots + avatar grouped */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
                     <div style={{ display: 'flex', gap: '4px' }}>
@@ -75,21 +57,31 @@ export default function SuperadminDashboardLayout({
                         <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
                         <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }} />
                     </div>
-                    <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, #F59E0B, #EF4444)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                        color: '#fff',
-                        border: '2px solid rgba(245,158,11,0.4)',
-                        flexShrink: 0,
-                    }}>
-                        {user?.name ? user.name.substring(0, 1).toUpperCase() : 'S'}
+                    <div
+                        onClick={() => router.push('/dashboard/superadmin/profile')}
+                        title="Profile"
+                        style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            background: 'linear-gradient(135deg, #F59E0B, #EF4444)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '1rem',
+                            fontWeight: 'bold',
+                            color: '#fff',
+                            border: '2px solid rgba(245,158,11,0.4)',
+                            flexShrink: 0,
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        {user?.avatar ? (
+                            <img src={user.avatar} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : (
+                            user?.name ? user.name.substring(0, 1).toUpperCase() : 'S'
+                        )}
                     </div>
                 </div>
 
@@ -169,17 +161,10 @@ export default function SuperadminDashboardLayout({
             </aside>
 
             {/* Main Content */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <div className="dashboard-main">
                 {/* Topbar */}
-                <header style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '1.25rem 2.5rem',
-                    borderBottom: '1px solid rgba(255,255,255,0.05)',
-                    flexShrink: 0,
-                }}>
-                    <nav style={{ display: 'flex', gap: '2rem' }}>
+                <header className="dashboard-header">
+                    <nav className="dashboard-topnav">
                         {topNavLinks.map((link) => {
                             const isActive = link.href === '/dashboard/superadmin'
                                 ? pathname === '/dashboard/superadmin'
@@ -204,18 +189,9 @@ export default function SuperadminDashboardLayout({
                         })}
                     </nav>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                    <div className="dashboard-actions">
                         {/* Search */}
-                        <div style={{
-                            backgroundColor: 'rgba(255,255,255,0.03)',
-                            borderRadius: '24px',
-                            padding: '0.55rem 1.2rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            width: '260px',
-                            border: '1px solid rgba(255,255,255,0.07)',
-                            gap: '0.6rem',
-                        }}>
+                        <div className="dashboard-search" style={{ width: 'min(260px, 100%)', gap: '0.6rem' }}>
                             <svg style={{ width: '16px', height: '16px', color: '#6B7280', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
@@ -247,14 +223,19 @@ export default function SuperadminDashboardLayout({
                                 fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer',
                                 border: '2px solid rgba(245,158,11,0.35)',
                                 flexShrink: 0,
+                                overflow: 'hidden',
                             }}
                         >
-                            {user?.name ? user.name.substring(0, 1).toUpperCase() : 'S'}
+                            {user?.avatar ? (
+                                <img src={user.avatar} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            ) : (
+                                user?.name ? user.name.substring(0, 1).toUpperCase() : 'S'
+                            )}
                         </div>
                     </div>
                 </header>
 
-                <main style={{ flex: 1, padding: '2.5rem', overflowY: 'auto' }} className="custom-scrollbar">
+                <main className="dashboard-main-content custom-scrollbar">
                     {children}
                 </main>
             </div>

@@ -98,15 +98,15 @@ export default function SuperAdminDashboard() {
     const { user } = useAuthStore();
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', width: '100%' }}>
+        <div className="responsive-page" style={{ width: '100%' }}>
 
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+            <div className="responsive-header" style={{ alignItems: 'flex-start' }}>
                 <div>
                     <p style={{ fontSize: '0.8rem', color: '#6B7280', fontWeight: 500, marginBottom: '0.25rem' }}>
                         Welcome back, {user?.name || 'Superadmin'} 👑
                     </p>
-                    <h1 style={{ fontSize: '2rem', fontWeight: 800, lineHeight: 1.1 }}>
+                    <h1 className="responsive-title" style={{ lineHeight: 1.1 }}>
                         Master{' '}
                         <span style={{ background: 'linear-gradient(90deg,#F59E0B,#EF4444)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                             Statistics
@@ -116,7 +116,7 @@ export default function SuperAdminDashboard() {
                         Global overview of platform growth, revenue, and infrastructure.
                     </p>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem', flexShrink: 0 }}>
+                <div style={{ display: 'flex', gap: '0.75rem', flexShrink: 0, flexWrap: 'wrap' }}>
                     <button style={{
                         padding: '0.65rem 1.25rem', borderRadius: '12px',
                         background: 'rgba(255,255,255,0.05)',
@@ -148,7 +148,7 @@ export default function SuperAdminDashboard() {
             </div>
 
             {/* Two-column section */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
 
                 {/* Global Activity Logs */}
                 <div style={{ ...glassCard, padding: '1.75rem' }}>

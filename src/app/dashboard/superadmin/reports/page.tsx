@@ -14,15 +14,15 @@ const reportData = [
 
 const ReportsPage = () => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div className="responsive-page">
       <header>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>
+        <h1 className="responsive-title">
           Super Admin <span className="gradient-text">Reports</span>
         </h1>
-        <p style={{ color: 'var(--text-muted)' }}>Analyze performance and growth metrics.</p>
+        <p className="responsive-subtitle">Analyze performance and growth metrics.</p>
       </header>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
         <ReportStat title="Total Revenue" value="Rs. 12.5L" growth="+15%" />
         <ReportStat title="Avg. Payout" value="Rs. 450" growth="-2%" />
         <ReportStat title="New Users" value="1,240" growth="+24%" />

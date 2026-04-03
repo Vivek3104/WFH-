@@ -175,11 +175,11 @@ const ReferralPage = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '1rem', flexWrap: 'wrap' }}>
+    <div className="responsive-page">
+      <div className="responsive-header">
         <div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.5rem', color: '#fff' }}>Referral Tree</h1>
-          <p style={{ color: '#6B7280', fontSize: '1rem' }}>
+          <h1 className="responsive-title" style={{ marginBottom: '0.5rem', color: '#fff' }}>Referral Tree</h1>
+          <p className="responsive-subtitle" style={{ fontSize: '1rem' }}>
             Track your downline visually and manage every referral level from one place.
           </p>
         </div>
@@ -204,7 +204,7 @@ const ReferralPage = () => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
         <div className="premium-glass" style={summaryCardStyle}>
           <span style={summaryLabelStyle}>Referral ID</span>
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
             <div style={codeStyle}>{referralId}</div>
             <button onClick={handleCopy} style={copyButtonStyle}>
               {copySuccess ? 'Copied' : 'Copy Link'}
@@ -315,7 +315,7 @@ const ReferralPage = () => {
           <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>Referral Members</h3>
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
+        <div className="responsive-table">
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
               <tr style={{ color: '#6B7280', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>

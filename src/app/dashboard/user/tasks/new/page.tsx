@@ -3,8 +3,8 @@ import React from 'react';
 
 export default function NewTaskPage() {
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '2rem', color: '#fff' }}>Create New <span style={{ color: '#A78BFA' }}>Task</span></h1>
+        <div className="responsive-page" style={{ maxWidth: '800px', margin: '0 auto', width: '100%' }}>
+            <h1 className="responsive-title" style={{ marginBottom: '2rem', color: '#fff' }}>Create New <span style={{ color: '#A78BFA' }}>Task</span></h1>
 
             <div style={{
                 backgroundColor: 'rgba(255,255,255,0.02)',
@@ -48,7 +48,7 @@ export default function NewTaskPage() {
                     />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div className="responsive-form-grid-2">
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                         <label style={{ color: '#9CA3AF', fontSize: '0.9rem' }}>Category</label>
                         <select style={{
@@ -82,7 +82,7 @@ export default function NewTaskPage() {
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem', flexWrap: 'wrap' }}>
                     <button style={{
                         padding: '0.8rem 2rem',
                         backgroundColor: '#C084FC',

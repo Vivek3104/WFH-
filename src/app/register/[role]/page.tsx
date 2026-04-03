@@ -2,15 +2,17 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
-import { authService } from '@/services/api';
+import { authService, adminService, superadminService } from '@/services/api';
 
 const RegisterPage = () => {
     const { role } = useParams();
-    const [name, setName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [socialNotice, setSocialNotice] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
 
@@ -28,22 +30,34 @@ const RegisterPage = () => {
         e.preventDefault();
         setLoading(true);
         setError('');
+        setSocialNotice('');
         try {
-            // Admin and Superadmin: no backend registration, redirect to login
-            if (role === 'superadmin' || role === 'admin') {
-                await new Promise(resolve => setTimeout(resolve, 800));
+            const name = `${firstName} ${lastName}`.trim();
+
+            if (role === 'superadmin') {
+                await superadminService.register({ name, email, password });
                 router.push(`/login/${role}`);
                 return;
             }
 
-            // User registration via real API
-            await authService.register({ name, email, password, role });
+            if (role === 'admin') {
+                await adminService.register({ name, email, password });
+                router.push(`/login/${role}`);
+                return;
+            }
+
+            await authService.register({ name, email, password });
             router.push(`/login/${role}`);
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Registration failed. Please try again.');
+            setError(err.response?.data?.error || err.response?.data?.message || 'Registration failed. Please try again.');
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleUnavailableSocialAuth = (provider: 'Google' | 'Apple') => {
+        setError('');
+        setSocialNotice(`${provider} sign up is not connected to the backend yet. Please use email and password for now.`);
     };
 
     return (
@@ -173,10 +187,23 @@ const RegisterPage = () => {
                         </div>
                     )}
 
+                    {socialNotice && (
+                        <div style={{
+                            padding: '0.75rem 1rem',
+                            background: 'rgba(245, 158, 11, 0.12)',
+                            border: '1px solid rgba(245, 158, 11, 0.2)',
+                            borderRadius: '12px',
+                            color: '#fbbf24',
+                            fontSize: '0.85rem'
+                        }}>
+                            {socialNotice}
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <div style={{ display: 'flex', gap: '0.75rem' }}>
-                            <input type="text" placeholder="First Name" required style={{ width: '100%', background: '#25252b', border: '1px solid #35353b', padding: '0.75rem 1rem', borderRadius: '8px', color: 'white' }} />
-                            <input type="text" placeholder="Last Name" required style={{ width: '100%', background: '#25252b', border: '1px solid #35353b', padding: '0.75rem 1rem', borderRadius: '8px', color: 'white' }} />
+                            <input type="text" placeholder="First Name" required value={firstName} onChange={(e) => setFirstName(e.target.value)} style={{ width: '100%', background: '#25252b', border: '1px solid #35353b', padding: '0.75rem 1rem', borderRadius: '8px', color: 'white' }} />
+                            <input type="text" placeholder="Last Name" required value={lastName} onChange={(e) => setLastName(e.target.value)} style={{ width: '100%', background: '#25252b', border: '1px solid #35353b', padding: '0.75rem 1rem', borderRadius: '8px', color: 'white' }} />
                         </div>
 
                         <input
@@ -241,7 +268,7 @@ const RegisterPage = () => {
                         </div>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                            <button type="button" style={{
+                            <button type="button" onClick={() => handleUnavailableSocialAuth('Google')} style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                                 background: 'transparent', border: '1px solid #35353b', color: 'rgba(255,255,255,0.7)',
                                 padding: '0.65rem', borderRadius: '8px', fontSize: '0.85rem', cursor: 'pointer'
@@ -254,7 +281,7 @@ const RegisterPage = () => {
                                 </svg>
                                 Google
                             </button>
-                            <button type="button" style={{
+                            <button type="button" onClick={() => handleUnavailableSocialAuth('Apple')} style={{
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                                 background: 'transparent', border: '1px solid #35353b', color: 'rgba(255,255,255,0.7)',
                                 padding: '0.65rem', borderRadius: '8px', fontSize: '0.85rem', cursor: 'pointer'

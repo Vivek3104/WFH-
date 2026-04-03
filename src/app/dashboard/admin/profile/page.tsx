@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
+import { adminService, normalizeAuthUser } from '@/services/api';
 
 const AdminProfilePage = () => {
     const { user, updateProfile } = useAuthStore();
@@ -10,6 +11,7 @@ const AdminProfilePage = () => {
     const [company, setCompany] = useState('WFH Platforms Pvt Ltd');
     const [previewUrl, setPreviewUrl] = useState(user?.avatar || '');
     const [isSaving, setIsSaving] = useState(false);
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
     useEffect(() => {
         if (user) {
@@ -22,6 +24,7 @@ const AdminProfilePage = () => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setAvatarFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewUrl(reader.result as string);
@@ -33,17 +36,35 @@ const AdminProfilePage = () => {
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
-        await new Promise(resolve => setTimeout(resolve, 800));
-        updateProfile({ name, email, avatar: previewUrl });
-        setIsSaving(false);
-        alert('Admin profile updated!');
+        try {
+            const profileData = new FormData();
+            profileData.append('name', name);
+            profileData.append('email', email);
+            profileData.append('phone', phone);
+            if (avatarFile) {
+                profileData.append('profilePic', avatarFile);
+            }
+
+            const updatedAdminResponse = await adminService.updateProfile(profileData);
+            updateProfile(normalizeAuthUser(updatedAdminResponse.data));
+
+            await adminService.updateCompanyDetails({
+                companyName: company,
+            });
+
+            alert('Admin profile updated!');
+        } catch (error: any) {
+            alert(error?.response?.data?.error || error?.message || 'Failed to update admin profile.');
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div className="responsive-page">
             <header>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Admin <span className="gradient-text">Profile</span></h1>
-                <p style={{ color: 'var(--text-muted)' }}>Manage your personal and company information.</p>
+                <h1 className="responsive-title">Admin <span className="gradient-text">Profile</span></h1>
+                <p className="responsive-subtitle">Manage your personal and company information.</p>
             </header>
 
             <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '800px' }}>
@@ -51,7 +72,7 @@ const AdminProfilePage = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     <section className="card">
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>Personal Details</h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="responsive-form-grid-2">
                             <FormGroup label="Full Name" value={name} onChange={setName} />
                             <FormGroup label="Email" value={email} onChange={setEmail} />
                             <FormGroup label="Phone" value={phone} onChange={setPhone} />
@@ -60,14 +81,14 @@ const AdminProfilePage = () => {
 
                     <section className="card">
                         <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>Company Details</h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="responsive-form-grid-2">
                             <FormGroup label="Company Name" value={company} onChange={setCompany} />
                             <FormGroup label="Registration ID" value="REG-12345678" readOnly />
                             <FormGroup label="GSTIN" value="27AAAAA0000A1Z5" readOnly />
                         </div>
                     </section>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
                         <button
                             type="submit"
                             disabled={isSaving}

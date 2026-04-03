@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
+import { authService, normalizeAuthUser } from '@/services/api';
 
 const UserProfilePage = () => {
     const { user, updateProfile } = useAuthStore();
@@ -23,6 +24,17 @@ const UserProfilePage = () => {
 
     const [isSaving, setIsSaving] = useState(false);
     const [previewUrl, setPreviewUrl] = useState(user?.avatar || '');
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+    const hasRealBankDetails = () =>
+        [accountHolder, bankName, accountNumber, ifscCode].every((value) => value.trim().length > 0) &&
+        !accountNumber.includes('XXXX') &&
+        !ifscCode.includes('XXXX');
+
+    const hasRealDocumentDetails = () =>
+        docType.trim().length > 0 &&
+        docNumber.trim().length > 0 &&
+        !docNumber.includes('XXXX');
 
     useEffect(() => {
         if (user) {
@@ -36,6 +48,7 @@ const UserProfilePage = () => {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setAvatarFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewUrl(reader.result as string);
@@ -47,25 +60,58 @@ const UserProfilePage = () => {
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        updateProfile({ name, email, avatar: previewUrl });
-        setIsSaving(false);
-        alert('Profile updated successfully!');
+        try {
+            if (!user?.id) throw new Error('User not found');
+
+            const profileData = new FormData();
+            profileData.append('name', name);
+            profileData.append('email', email);
+            profileData.append('phone', phone);
+            if (avatarFile) {
+                profileData.append('profilePic', avatarFile);
+            }
+
+            const updatedUserResponse = await authService.updateProfile(user.id, profileData);
+            const normalizedUser = normalizeAuthUser(updatedUserResponse.data);
+            updateProfile(normalizedUser);
+
+            if (hasRealBankDetails()) {
+                await authService.updateBankDetails({
+                    accountHolderName: accountHolder,
+                    bankName,
+                    accountNumber,
+                    ifscCode,
+                });
+            }
+
+            if (hasRealDocumentDetails()) {
+                const docData = new FormData();
+                docData.append('docType', docType);
+                docData.append('docNumber', docNumber);
+                await authService.updateGovernmentDoc(docData);
+            }
+
+            alert('Profile updated successfully!');
+        } catch (error: any) {
+            alert(error?.response?.data?.error || error?.message || 'Failed to update profile.');
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     return (
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="responsive-page" style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <header style={{ marginBottom: '2.5rem' }}>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#fff' }}>Profile <span style={{ color: '#A78BFA' }}>Settings</span></h1>
-                <p style={{ color: '#9CA3AF', marginTop: '0.5rem' }}>Manage your account details, payout methods, and documents.</p>
+                <h1 className="responsive-title" style={{ color: '#fff' }}>Profile <span style={{ color: '#A78BFA' }}>Settings</span></h1>
+                <p className="responsive-subtitle">Manage your account details, payout methods, and documents.</p>
             </header>
 
-            <form onSubmit={handleSave} style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+            <form onSubmit={handleSave} className="user-profile-form">
 
                 {/* LEFT PROFILE CARD */}
-                <section style={{
-                    width: '320px',
+                <section className="user-profile-sidebar" style={{
+                    width: '100%',
+                    maxWidth: '320px',
                     backgroundColor: 'rgba(255,255,255,0.02)',
                     border: '1px solid rgba(255,255,255,0.05)',
                     borderRadius: '24px',
@@ -73,9 +119,7 @@ const UserProfilePage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '1.5rem',
-                    position: 'sticky',
-                    top: '20px'
+                    gap: '1.5rem'
                 }}>
                     <div style={{ position: 'relative' }}>
                         <div style={{
@@ -193,7 +237,7 @@ const UserProfilePage = () => {
                             </div>
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                        <div className="responsive-form-grid-2">
                             <FormGroup label="Full Name" value={name} onChange={setName} />
                             <FormGroup label="Email Address" value={email} onChange={setEmail} readOnly />
                             <FormGroup label="Phone Number" value={phone} onChange={setPhone} />
@@ -212,7 +256,7 @@ const UserProfilePage = () => {
                             Bank Details
                         </h3>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                        <div className="responsive-form-grid-2">
                             <FormGroup label="Account Holder Name" value={accountHolder} onChange={setAccountHolder} />
                             <FormGroup label="Bank Name" value={bankName} onChange={setBankName} />
                             <FormGroup label="Account Number" value={accountNumber} onChange={setAccountNumber} type="password" />
@@ -232,7 +276,7 @@ const UserProfilePage = () => {
                             Government ID Document
                         </h3>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr) auto', gap: '1.5rem', alignItems: 'flex-end' }}>
+                        <div className="responsive-form-grid-2" style={{ alignItems: 'flex-end' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                 <label style={{ fontSize: '0.85rem', color: '#9CA3AF', fontWeight: 500 }}>Document Type</label>
                                 <select
@@ -291,7 +335,7 @@ const UserProfilePage = () => {
                     </section>
 
                     {/* Bottom Action Footer */}
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem', flexWrap: 'wrap' }}>
                         <button
                             type="submit"
                             disabled={isSaving}

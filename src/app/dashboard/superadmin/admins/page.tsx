@@ -9,16 +9,17 @@ const ManageAdminsPage = () => {
     ]);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="responsive-page">
+            <header className="responsive-header">
                 <div>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Manage <span className="gradient-text">Administrators</span></h1>
-                    <p style={{ color: 'var(--text-muted)' }}>Oversee administrative accounts and their permissions.</p>
+                    <h1 className="responsive-title">Manage <span className="gradient-text">Administrators</span></h1>
+                    <p className="responsive-subtitle">Oversee administrative accounts and their permissions.</p>
                 </div>
                 <button className="btn-primary">+ Add New Admin</button>
             </header>
 
             <section className="card shadow-lg" style={{ padding: '0', overflow: 'hidden' }}>
+                <div className="responsive-table">
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                     <thead>
                         <tr style={{ background: 'var(--surface-hover)', borderBottom: '1px solid var(--border)', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
@@ -60,6 +61,7 @@ const ManageAdminsPage = () => {
                         ))}
                     </tbody>
                 </table>
+                </div>
             </section>
         </div>
     );

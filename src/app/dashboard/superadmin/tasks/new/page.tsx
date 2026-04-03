@@ -35,10 +35,10 @@ const CreateTaskPage = () => {
     };
 
     return (
-        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+        <div className="responsive-page" style={{ maxWidth: '700px', margin: '0 auto' }}>
             <header style={{ marginBottom: '2.5rem' }}>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800 }}>Create New <span className="gradient-text">Task</span></h1>
-                <p style={{ color: 'var(--text-muted)' }}>Fill in the details below to post a new task for workers.</p>
+                <h1 className="responsive-title">Create New <span className="gradient-text">Task</span></h1>
+                <p className="responsive-subtitle">Fill in the details below to post a new task for workers.</p>
             </header>
 
             <form onSubmit={handleSubmit} className="card glass" style={{ padding: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -54,7 +54,7 @@ const CreateTaskPage = () => {
                     />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div className="responsive-form-grid-2">
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                         <label style={{ fontSize: '0.9rem', fontWeight: 600 }}>Payout (₹)</label>
                         <input
@@ -113,7 +113,7 @@ const CreateTaskPage = () => {
                     />
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap' }}>
                     <button
                         type="button"
                         onClick={() => router.back()}
